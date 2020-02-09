@@ -4,7 +4,7 @@
 These are the following requirements for your implementation of PyArcade.
 
 ## Input System
-NOTE: Requirements to STORE something does not mean it needs to be persistent across restarts of the system.
+NOTE: Requirements to STORE something does **not** mean it needs to be persistent across restarts of the system.
 
 1. The *input_system* **MUST** ignore all inputs that do not have meaningful functionality for *Mastermind*.
 2. The *input_system* **MUST** parse a string of integers of the appropriate size into an input that *Mastermind* can use.
@@ -14,8 +14,8 @@ NOTE: Requirements to STORE something does not mean it needs to be persistent ac
 ## Mastermind (Cows and Bulls)
 1. *Mastermind* **MUST** generate a random hidden sequence of 4 numbers from 0 to 9 (inclusive). 
 2. *Mastermind* **MUST** accept as input from the user a guessed sequence, 4 numbers from 0 to 9 (inclusive).
-3. *Mastermind* **MUST** output and *evaluation.* This includes for each digit in the guessed sequence, whether that digit is 
-    1. Nowhere in 4 the hidden sequence at all 
+3. *Mastermind* **MUST** output an *evaluation.* This includes for each digit in the guessed sequence, whether that digit is:
+    1. Nowhere in the hidden sequence at all 
     2. Somewhere in the hidden sequence, but not in the location it was submitted
     3. Is in the hidden sequence at the location it was submitted. 
 
