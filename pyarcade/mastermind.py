@@ -14,6 +14,7 @@ class Mastermind:
     def __init__(self, width: Optional[int] = 4, max_range: Optional[int] = 10):
         self.width = width
         self.max_range = max_range
+        self.guess_history = []
 
     def generate_hidden_sequence(self) -> List[int]:
         """
@@ -21,3 +22,7 @@ class Mastermind:
             hidden_sequence List[int]: A sequence of integers to be guessed by the player.
         """
         return [random.randint(0, self.max_range) for _ in range(self.width)]
+
+    def on_guess_made(self, guess: [int]):
+        self.guess_history.append(guess)
+
