@@ -1,10 +1,11 @@
-from pyarcade.mastermind import *
+from pyarcade.input_system import Client
 
 
 def run_pyarcade():
     """ This will effectively become our program entrypoint.
     """
-    pass
+    client = Client()
+    client.start()
 
 
 if __name__ == "__main__":
