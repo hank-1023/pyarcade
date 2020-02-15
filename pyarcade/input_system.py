@@ -9,12 +9,12 @@ class Client:
         self.master_mind = Mastermind()
         self.file = open(file, 'r')
 
-    def start(self):
-        lines = self.file.readlines()
+    def start(self) -> bool:
+        lines = self.file.read().splitlines()
         for line in lines:
             if not line:
                 continue
-            result_code, result_arr = self.input_manager.parse_input(line[0])
+            result_code, result_arr = self.input_manager.parse_input(line)
             if result_code == 0:
                 self.master_mind.reset()
                 print("Game Reset!")
@@ -25,7 +25,8 @@ class Client:
                 correct, misplaced, nowhere = self.master_mind.on_made_guess(result_arr)
                 if len(correct) == 4:
                     print("All indices correct!")
-                    break
+                    self.file.close()
+                    return True
                 if correct:
                     print("Correct indices are:")
                     print(correct)
@@ -38,6 +39,8 @@ class Client:
                 print("Please try again")
             elif result_code == -1:
                 print("Please check and input 4 digits")
+        self.file.close()
+        return False
 
 
 class InputManager:

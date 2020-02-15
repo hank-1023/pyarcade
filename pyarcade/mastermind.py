@@ -53,4 +53,3 @@ class Mastermind:
 
     def clear_history(self):
         self.guess_history = []
-
