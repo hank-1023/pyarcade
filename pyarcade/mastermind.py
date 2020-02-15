@@ -47,4 +47,10 @@ class Mastermind:
 
         return correct_indices, misplaced_indices, nowhere_indices
 
+    def reset(self):
+        self.current_hidden_sequence = self.generate_hidden_sequence()
+        self.clear_history()
+
+    def clear_history(self):
+        self.guess_history = []
 

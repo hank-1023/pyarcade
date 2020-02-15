@@ -11,10 +11,34 @@ class Client:
     def start(self):
         print("Please start guessing: ")
         while True:
-            line = stdin.readline().rsplit()[0]
-            result_code, result_arr = self.input_manager.parse_input(line)
-            if result_code == 2:
-                print(self.master_mind.on_made_guess(result_arr))
+            line = stdin.readline().rsplit()
+            if not line:
+                print("Please enter an value:")
+                continue
+            result_code, result_arr = self.input_manager.parse_input(line[0])
+            if result_code == 0:
+                self.master_mind.reset()
+                print("Game Reset!")
+            elif result_code == 1:
+                self.master_mind.clear_history()
+                print("History cleared!")
+            elif result_code == 2:
+                correct, misplaced, nowhere = self.master_mind.on_made_guess(result_arr)
+                if len(correct) == 4:
+                    print("All indices correct!")
+                    break
+                if correct:
+                    print("Correct indices are:")
+                    print(correct)
+                if misplaced:
+                    print("Misplaced indices are:")
+                    print(misplaced)
+                if nowhere:
+                    print("Those indices do not exists in sequence:")
+                    print(nowhere)
+                print("Please try again")
+            elif result_code == -1:
+                print("Please check and input 4 digits")
 
 
 class InputManager:
@@ -28,7 +52,7 @@ class InputManager:
         elif user_input == "clear":
             return 1, []
         else:
-            if user_input.isnumeric():   # Checking if all digits in input string are 4 digits
+            if user_input.isnumeric() and len(user_input) == 4:   # Checking if all digits in input string are 4 digits
                 int_array = [int(i) for i in user_input]
                 return 2, int_array
             else:
