@@ -23,6 +23,6 @@ class Mastermind:
         """
         return [random.randint(0, self.max_range) for _ in range(self.width)]
 
-    def on_guess_made(self, guess: [int]):
+    def on_made_guess(self, guess: [int]):
         self.guess_history.append(guess)
 

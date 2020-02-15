@@ -3,27 +3,25 @@ from pyarcade.mastermind import Mastermind
 
 class Client:
     def __init__(self):
-        self.input_manager = InputManager(self)
+        self.input_manager = InputManager()
         self.master_mind = Mastermind()
 
-    def add_guess(self, guess: [int]):
-        self.master_mind.on_guess_made(guess)
+    def start(self, user_input: str):
+        result_code, result_arr = self.input_manager.parse_input(user_input)
+        if result_code == 2:
+            self.master_mind.on_made_guess(result_arr)
 
 
 class InputManager:
-    def __init__(self, client: Client):
-        self.client = client
-
-    def parse_input(self, user_input: str):
+    def parse_input(self, user_input: str) -> (int, [int]):
         if user_input == "reset":
-            # reset the game
-            pass
+            return 0, []
         elif user_input == "clear":
-            # clear the game
-            pass
+            return 1, []
         else:
+            # Check if all digits in input string are digits
             if user_input.isnumeric():
                 int_array = [int(i) for i in user_input]
-                self.client.add_guess(int_array)
+                return 2, int_array
             else:
-                print("Input is not a sequence of number")
+                return -1, []
