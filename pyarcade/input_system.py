@@ -4,16 +4,15 @@ from sys import stdin
 
 class Client:
     """ A backend client that connect functionality of InputManager and Mastermind """
-    def __init__(self):
+    def __init__(self, file):
         self.input_manager = InputManager()
         self.master_mind = Mastermind()
+        self.file = open(file, 'r')
 
     def start(self):
-        print("Please start guessing: ")
-        while True:
-            line = stdin.readline().rsplit()
+        lines = self.file.readlines()
+        for line in lines:
             if not line:
-                print("Please enter an value:")
                 continue
             result_code, result_arr = self.input_manager.parse_input(line[0])
             if result_code == 0:

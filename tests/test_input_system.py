@@ -1,5 +1,5 @@
 import unittest
-from pyarcade.input_system import InputManager
+from pyarcade.input_system import *
 
 
 class TestInputSystem(unittest.TestCase):
@@ -12,6 +12,9 @@ class TestInputSystem(unittest.TestCase):
         self.assertEqual(input_manager.parse_input("abc"), (-1, []))
         self.assertEqual(input_manager.parse_input("1a23"), (-1, []))
 
+    def test_client(self):
+        client = Client("pyarcade/input1234.txt")
+        client.start()
 
 
 if __name__ == '__main__':
