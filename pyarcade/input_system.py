@@ -53,9 +53,9 @@ class InputManager:
             return 0, []
         elif user_input == "clear":
             return 1, []
+        # Checking if all digits in input string are 4 digits
+        elif user_input.isnumeric() and len(user_input) == 4:
+            int_array = [int(i) for i in user_input]
+            return 2, int_array
         else:
-            if user_input.isnumeric() and len(user_input) == 4:   # Checking if all digits in input string are 4 digits
-                int_array = [int(i) for i in user_input]
-                return 2, int_array
-            else:
-                return -1, []
+            return -1, []
