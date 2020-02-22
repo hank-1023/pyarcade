@@ -11,17 +11,30 @@ class Mastermind:
             max_range (int): The range that a single digit can vary
 
     """
-    def __init__(self, game_type: int, width: Optional[int] = 4, max_range: Optional[int] = 10):
+
+    def __init__(self, game_type: int, width: Optional[int] = 4, max_range: Optional[int] = 10,
+                 bomb_num: Optional[int] = 2):
+        self.game_type = game_type
         self.width = width
-        self.max_range = max_range
+        self.guess_history = []
         if game_type == 0:
+            self.max_range = max_range
             self.current_hidden_sequence = self.generate_hidden_sequence()
         elif game_type == 1:
+            self.bomb_num = bomb_num
+            self.remain_count = width ** 2 - bomb_num
             self.game_matrix = self.generate_game_matrix()
-        self.guess_history = []
 
     def generate_game_matrix(self) -> [[int]]:
-        pass
+        game_matrix = [[0 for _ in range(self.width)] for _ in range(self.width)]
+
+        random_rows = random.sample(range(0, self.width), self.bomb_num)
+        random_cols = random.sample(range(0, self.width), self.bomb_num)
+
+        for row, col in zip(random_rows, random_cols):
+            game_matrix[row][col] = 1
+
+        return game_matrix
 
     def generate_hidden_sequence(self) -> List[int]:
         """
@@ -30,26 +43,29 @@ class Mastermind:
         """
         return [random.randint(0, self.max_range) for _ in range(self.width)]
 
-    def on_user_input(self, user_input: (int, [int])):
+    def on_user_input(self, op_code: int, user_input: [int]):
         """
 
         Args:
+            op_code:
             user_input:
 
         Returns:
 
         """
-        self.guess_history.append(user_input)
-        if user_input[0] == 0:
+        if op_code == 0:
             self.reset()
-        elif user_input[0] == 1:
+        elif op_code == 1:
             self.clear_history()
-        elif user_input[0] == 2:
-            self.execute_hs_input(user_input[1])
-        elif user_input[0] == 3:
-            self.execute_sweeper_input(user_input[1])
+        elif op_code == 2:
+            feedback = self.execute_hs_input(user_input)
+            self.eval_hs(feedback)
+        elif op_code == 3:
+            feedback = self.execute_sweeper_input(user_input)
+            self.eval_sweeper(feedback)
 
     def execute_hs_input(self, user_input: [int]) -> ([int], [int], [int]):
+        self.guess_history.append(user_input)
         correct_indices = []
         misplaced_indices = []
         nowhere_indices = []
@@ -64,12 +80,40 @@ class Mastermind:
         return correct_indices, misplaced_indices, nowhere_indices
 
     def execute_sweeper_input(self, user_input: [int]) -> int:
-        pass
+        if user_input in self.guess_history:
+            return -1  # Already guessed
+        self.guess_history.append(user_input)
 
+        row, col = user_input[0], user_input[1]
+        if self.game_matrix[row][col] == 1:
+            return 0
+        else:
+            return 1
 
+    def eval_hs(self, feedback):
+        if len(feedback[0]) == self.width:
+            self.game_over(True)
+
+    def eval_sweeper(self, feedback):
+        if feedback == 0:
+            self.game_over(False)
+        elif feedback == 1:
+            self.remain_count -= 1
+            if self.remain_count == 0:
+                self.game_over(True)
+
+    @staticmethod
+    def game_over(win: bool):
+        if win:
+            print("You Win")
+        else:
+            print("You lose")
 
     def reset(self):
-        self.current_hidden_sequence = self.generate_hidden_sequence()
+        if self.game_type == 0:
+            self.current_hidden_sequence = self.generate_hidden_sequence()
+        else:
+            self.game_matrix = self.generate_game_matrix()
         self.clear_history()
 
     def clear_history(self):
