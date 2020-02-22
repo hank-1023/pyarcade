@@ -11,11 +11,17 @@ class Mastermind:
             max_range (int): The range that a single digit can vary
 
     """
-    def __init__(self, width: Optional[int] = 4, max_range: Optional[int] = 10):
+    def __init__(self, game_type: int, width: Optional[int] = 4, max_range: Optional[int] = 10):
         self.width = width
         self.max_range = max_range
-        self.current_hidden_sequence = self.generate_hidden_sequence()
+        if game_type == 0:
+            self.current_hidden_sequence = self.generate_hidden_sequence()
+        elif game_type == 1:
+            self.game_matrix = self.generate_game_matrix()
         self.guess_history = []
+
+    def generate_game_matrix(self) -> [[int]]:
+        pass
 
     def generate_hidden_sequence(self) -> List[int]:
         """
@@ -24,20 +30,30 @@ class Mastermind:
         """
         return [random.randint(0, self.max_range) for _ in range(self.width)]
 
-    def on_made_guess(self, guess_arr: [int]) -> ([int], [int], [int]):
+    def on_user_input(self, user_input: (int, [int])):
         """
+
         Args:
-            guess_arr: the user's guess
+            user_input:
 
         Returns:
-            the indices where the user has the correct guess, incorrect but somewhere in the hidden_sequence,
-            and those which are not existed in hidden_sequence
+
         """
-        self.guess_history.append(guess_arr)
+        self.guess_history.append(user_input)
+        if user_input[0] == 0:
+            self.reset()
+        elif user_input[0] == 1:
+            self.clear_history()
+        elif user_input[0] == 2:
+            self.execute_hs_input(user_input[1])
+        elif user_input[0] == 3:
+            self.execute_sweeper_input(user_input[1])
+
+    def execute_hs_input(self, user_input: [int]) -> ([int], [int], [int]):
         correct_indices = []
         misplaced_indices = []
         nowhere_indices = []
-        for i, guess_digit in enumerate(guess_arr):
+        for i, guess_digit in enumerate(user_input):
             if guess_digit == self.current_hidden_sequence[i]:
                 correct_indices.append(i)
             elif guess_digit in self.current_hidden_sequence:
@@ -46,6 +62,11 @@ class Mastermind:
                 nowhere_indices.append(i)
 
         return correct_indices, misplaced_indices, nowhere_indices
+
+    def execute_sweeper_input(self, user_input: [int]) -> int:
+        pass
+
+
 
     def reset(self):
         self.current_hidden_sequence = self.generate_hidden_sequence()
