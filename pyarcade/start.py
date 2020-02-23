@@ -1,12 +1,11 @@
-from pyarcade.input_system import Client
+from pyarcade.input_system import *
 
 
-def run_pyarcade():
+def run_pyarcade(game_type: GameType):
     """ This will effectively become our program entrypoint.
     """
-    client = Client("inputForStart.txt")
-    client.start()
+    input_manager = InputManager(game_type)
 
 
 if __name__ == "__main__":
-    run_pyarcade()
+    run_pyarcade(GameType.HIDDEN_SEQUENCE)

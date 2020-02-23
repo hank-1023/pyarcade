@@ -1,5 +1,24 @@
+from enum import Enum
 from typing import Optional, List
 import random
+
+
+class GameState(Enum):
+    PENDING = 0
+    WIN = 1
+    LOSE = 2
+
+
+class GameType(Enum):
+    HIDDEN_SEQUENCE = 0
+    MINESWEEPER = 1
+
+
+class OpCode(Enum):
+    RESET = 0
+    CLEAR_HISTORY = 1
+    HS_INPUT = 2
+    MINESWEEPER_INPUT = 3
 
 
 class Mastermind:
@@ -12,15 +31,16 @@ class Mastermind:
 
     """
 
-    def __init__(self, game_type: int, width: Optional[int] = 4, max_range: Optional[int] = 10,
+    def __init__(self, game_type: GameType, width: Optional[int] = 4, max_range: Optional[int] = 10,
                  bomb_num: Optional[int] = 2):
         self.game_type = game_type
         self.width = width
         self.guess_history = []
-        if game_type == 0:
+        self.game_state = GameState.PENDING
+        if game_type == GameType.HIDDEN_SEQUENCE:
             self.max_range = max_range
             self.current_hidden_sequence = self.generate_hidden_sequence()
-        elif game_type == 1:
+        elif game_type == GameType.MINESWEEPER:
             self.bomb_num = bomb_num
             self.remain_count = width ** 2 - bomb_num
             self.game_matrix = self.generate_game_matrix()
@@ -43,7 +63,7 @@ class Mastermind:
         """
         return [random.randint(0, self.max_range) for _ in range(self.width)]
 
-    def on_user_input(self, op_code: int, user_input: [int]):
+    def on_user_input(self, op_code: OpCode, user_input: [int]):
         """
 
         Args:
@@ -53,14 +73,14 @@ class Mastermind:
         Returns:
 
         """
-        if op_code == 0:
+        if op_code == OpCode.RESET:
             self.reset()
-        elif op_code == 1:
+        elif op_code == OpCode.CLEAR_HISTORY:
             self.clear_history()
-        elif op_code == 2:
+        elif op_code == OpCode.HS_INPUT:
             feedback = self.execute_hs_input(user_input)
             self.eval_hs(feedback)
-        elif op_code == 3:
+        elif op_code == OpCode.MINESWEEPER_INPUT and all(n < self.width for n in user_input):
             feedback = self.execute_sweeper_input(user_input)
             self.eval_sweeper(feedback)
 
@@ -102,18 +122,19 @@ class Mastermind:
             if self.remain_count == 0:
                 self.game_over(True)
 
-    @staticmethod
-    def game_over(win: bool):
+    def game_over(self, win: bool):
         if win:
-            print("You Win")
+            self.game_state = GameState.WIN
         else:
-            print("You lose")
+            self.game_state = GameState.LOSE
 
     def reset(self):
-        if self.game_type == 0:
+        if self.game_type == GameType.HIDDEN_SEQUENCE:
             self.current_hidden_sequence = self.generate_hidden_sequence()
         else:
             self.game_matrix = self.generate_game_matrix()
+            self.remain_count = self.width ** 2 - self.bomb_num
+        self.game_state = GameState.PENDING
         self.clear_history()
 
     def clear_history(self):
