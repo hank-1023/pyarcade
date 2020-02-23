@@ -65,10 +65,13 @@ class Mastermind:
 
     def on_user_input(self, op_code: OpCode, user_input: [int]):
         """
+        Calls reset() or clear_history() if that's the desired operation
+        Otherwise calls execute_hs_input()  and eval_hs() if it's a hidden_sequence input or
+        execute_sweeper_input() and eval_sweeper() if it's a minesweeper input
 
         Args:
-            op_code:
-            user_input:
+            op_code: Enum Op_Code indicates which operation to carry out
+            user_input: The input array parsed by the input_system
 
         Returns:
 
@@ -110,11 +113,17 @@ class Mastermind:
         else:
             return 1
 
-    def eval_hs(self, feedback):
+    def eval_hs(self, feedback: ([int], [int], [int])):
+        """
+        Evaluates the result of execution for hidden sequence inputs
+        """
         if len(feedback[0]) == self.width:
             self.game_over(True)
 
     def eval_sweeper(self, feedback):
+        """
+        Evaluates the result of execution for mine sweeper inputs
+        """
         if feedback == 0:
             self.game_over(False)
         elif feedback == 1:
@@ -123,12 +132,18 @@ class Mastermind:
                 self.game_over(True)
 
     def game_over(self, win: bool):
+        """
+        Changes the game_state if necessary
+        """
         if win:
             self.game_state = GameState.WIN
         else:
             self.game_state = GameState.LOSE
 
     def reset(self):
+        """
+        regenerates game_matrix / sequence, reset counters and states and clear game history
+        """
         if self.game_type == GameType.HIDDEN_SEQUENCE:
             self.current_hidden_sequence = self.generate_hidden_sequence()
         else:

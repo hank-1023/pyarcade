@@ -5,8 +5,10 @@ from pyarcade.mastermind import *
 
 class TestInputSystem(unittest.TestCase):
 
-    # Module test for hidden sequence game
     def test_game_input_hidden_sequence(self):
+        """
+        Module test for hidden sequence game
+        """
         input_manager = InputManager(GameType.HIDDEN_SEQUENCE)
         self.assertEqual(input_manager.mastermind.game_state, GameState.PENDING)
         # Suppose the hidden sequence is now [1, 2, 3, 4]
@@ -36,6 +38,9 @@ class TestInputSystem(unittest.TestCase):
         self.assertEqual(input_manager.mastermind.game_state, GameState.PENDING)
 
     def test_game_input_mine_sweeper(self):
+        """
+        Module test for mine sweeper game
+        """
         input_manager = InputManager(GameType.MINESWEEPER)
         mastermind = input_manager.mastermind
 
