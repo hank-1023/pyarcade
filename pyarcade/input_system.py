@@ -1,61 +1,36 @@
-from pyarcade.mastermind import Mastermind
-from sys import stdin
-
-
-class Client:
-    """ A backend client that connect functionality of InputManager and Mastermind """
-    def __init__(self, file):
-        self.input_manager = InputManager()
-        self.master_mind = Mastermind()
-        self.file = open(file, 'r')
-
-    def start(self) -> bool:
-        lines = self.file.read().splitlines()
-        for line in lines:
-            if not line:
-                continue
-            result_code, result_arr = self.input_manager.parse_input(line)
-            if result_code == 0:
-                self.master_mind.reset()
-                print("Game Reset!")
-            elif result_code == 1:
-                self.master_mind.clear_history()
-                print("History cleared!")
-            elif result_code == 2:
-                correct, misplaced, nowhere = self.master_mind.on_made_guess(result_arr)
-                if len(correct) == 4:
-                    print("All indices correct!")
-                    self.file.close()
-                    return True
-                if correct:
-                    print("Correct indices are:")
-                    print(correct)
-                if misplaced:
-                    print("Misplaced indices are:")
-                    print(misplaced)
-                if nowhere:
-                    print("Those indices do not exists in sequence:")
-                    print(nowhere)
-                print("Please try again")
-            elif result_code == -1:
-                print("Please check and input 4 digits")
-        self.file.close()
-        return False
+from pyarcade.mastermind import *
 
 
 class InputManager:
-    """ A class managing all user input
+    """ A class managing all user inputs """
+    def __init__(self, game_type: GameType):
+        self.mastermind = Mastermind(game_type=game_type)
+        self.game_type = game_type
 
-        Returns: (int, [int]) as result code and parsed array (if any)
-    """
-    def parse_input(self, user_input: str) -> (int, [int]):
-        if user_input == "reset":
-            return 0, []
-        elif user_input == "clear":
-            return 1, []
-        # Checking if all digits in input string are 4 digits
-        elif user_input.isnumeric() and len(user_input) == 4:
-            int_array = [int(i) for i in user_input]
-            return 2, int_array
+    def parse_input(self, input_string: str):
+        """
+        Parse user's raw input
+        Args:
+            input_string:
+            Input format for Hidden Sequence game must be 4
+            consecutive numbers e.g. "1234"
+
+            Input format for minesweeper must be two numbers separated by column
+            and spaces (if needed)
+        """
+        if input_string == "reset":
+            self.mastermind.on_user_input(OpCode.RESET, None)
+        elif input_string == "clear":
+            self.mastermind.on_user_input(OpCode.CLEAR_HISTORY, None)
+        # Check if all digits in input string are 4 digits
+        elif self.game_type == GameType.HIDDEN_SEQUENCE and input_string.isnumeric() and len(input_string) == 4:
+            int_array = [int(i) for i in input_string]
+            self.mastermind.on_user_input(OpCode.HS_INPUT, int_array)
+        elif self.game_type == GameType.MINESWEEPER:
+            # Check if the input are two numbers seperated by ','
+            split_arr = [i.strip() for i in input_string.split(',')]
+            if len(split_arr) == 2 and split_arr[0].isnumeric() and split_arr[1].isnumeric():
+                int_array = [int(i) for i in split_arr]
+                self.mastermind.on_user_input(OpCode.MINESWEEPER_INPUT, int_array)
         else:
-            return -1, []
+            return
