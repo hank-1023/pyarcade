@@ -27,7 +27,7 @@ class InputManager:
             int_array = [int(i) for i in input_string]
             self.mastermind.on_user_input(OpCode.HS_INPUT, int_array)
         elif self.game_type == GameType.MINESWEEPER:
-            # Check if the input are two numbers seperated by ','
+            # Check if the input are two numbers separated by ','
             split_arr = [i.strip() for i in input_string.split(',')]
             if len(split_arr) == 2 and split_arr[0].isnumeric() and split_arr[1].isnumeric():
                 int_array = [int(i) for i in split_arr]
