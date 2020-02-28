@@ -1,4 +1,4 @@
-from pyarcade.mastermind import *
+from pyarcade.mastermind.mastermind import *
 
 
 class InputManager:

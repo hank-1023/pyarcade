@@ -22,6 +22,26 @@ class OpCode(Enum):
 
 
 class Mastermind:
+    def start(self):
+        """
+        Should set all states of the game (e.g. generate random data...)
+        """
+        raise NotImplementedError
+
+    def on_user_input(self):
+        """
+        Should modify game states in response to user input
+        """
+        raise NotImplementedError
+
+    def reset(self):
+        raise NotImplementedError
+
+    def clear_history(self):
+        raise NotImplementedError
+
+
+class Masterminds:
     """ A class representing a Mastermind game session
 
         Args:
