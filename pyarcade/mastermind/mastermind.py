@@ -23,7 +23,7 @@ class iMastermind:
 
     def on_user_input(self, op_code: OpCode, game_input: [int]):
         """
-        Controller of Mastermind functions.
+        Controller of iMastermind functions.
         """
         if op_code == OpCode.RESET:
             self.reset()
