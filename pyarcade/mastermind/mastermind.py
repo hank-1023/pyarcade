@@ -13,7 +13,7 @@ class OpCode(Enum):
     VALID_INPUT = 2
 
 
-class Mastermind:
+class iMastermind:
     """
     Product interface. Can be subclassed to concrete products to be used in actual games
     """
