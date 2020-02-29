@@ -1,5 +1,6 @@
 from pyarcade.mastermind.hidden_sequence_mastermind import *
 from pyarcade.mastermind.mine_sweeper_mastermind import *
+from pyarcade.mastermind.war_mastermind import *
 
 
 class MastermindFactory:
@@ -19,5 +20,4 @@ class MineSweeperMastermindFactory(MastermindFactory):
 
 class WarGameMastermindFactory(MastermindFactory):
     def create_master_mind(self, game_size: int, game_range: int) -> Mastermind:
-        raise NotImplementedError
-
+        return WarMastermind()
