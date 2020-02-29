@@ -2,7 +2,7 @@ from random import random
 from pyarcade.mastermind.mastermind import *
 
 
-class MineSweeperMastermind(Mastermind):
+class MineSweeperMastermind(iMastermind):
     def __init__(self, bomb_num: int = 2, board_size: int = 4):
         super().__init__()
         self.bomb_num = bomb_num

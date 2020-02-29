@@ -19,7 +19,7 @@ class Card:
         return RANK_SEQUENCE.index(self.rank) < RANK_SEQUENCE.index(other.rank)
 
 
-class WarMastermind(Mastermind):
+class WarMastermind(iMastermind):
     def __init__(self):
         super().__init__()
         self.player_cards = []

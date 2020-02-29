@@ -5,17 +5,17 @@ import unittest
 class MastermindTestCase(unittest.TestCase):
 
     def test_generate_random_sequence(self):
-        game = Mastermind(GameType.HIDDEN_SEQUENCE)
+        game = iMastermind(GameType.HIDDEN_SEQUENCE)
         self.assertEqual(len(game.generate_hidden_sequence()), 4)
 
     def test_generate_game_matrix(self):
-        game = Mastermind(GameType.MINESWEEPER)
+        game = iMastermind(GameType.MINESWEEPER)
         matrix = game.generate_game_matrix()
         self.assertEqual(len(matrix), 4)
         self.assertEqual(len(matrix[0]), 4)
 
     def test_execute_hs_input(self):
-        game = Mastermind(GameType.HIDDEN_SEQUENCE)
+        game = iMastermind(GameType.HIDDEN_SEQUENCE)
         game.current_hidden_sequence = [1, 2, 3, 4]
 
         correct, misplaced, nowhere = game.execute_hs_input([5, 6, 7, 8])
@@ -34,7 +34,7 @@ class MastermindTestCase(unittest.TestCase):
         self.assertEqual(nowhere, [2])
 
     def test_execute_sweeper_input(self):
-        game = Mastermind(GameType.MINESWEEPER)
+        game = iMastermind(GameType.MINESWEEPER)
         game.game_matrix = [[0, 0, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0], [0, 0, 0, 1]]
 
         result = game.execute_sweeper_input([0, 0])
@@ -47,7 +47,7 @@ class MastermindTestCase(unittest.TestCase):
         self.assertEqual(result, 0)
 
     def test_reset_sweeper(self):
-        game = Mastermind(GameType.MINESWEEPER)
+        game = iMastermind(GameType.MINESWEEPER)
 
         # Test reset when there hasn't been user inputs
         game.reset()

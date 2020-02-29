@@ -13,7 +13,7 @@ class OpCode(Enum):
     VALID_INPUT = 2
 
 
-class Mastermind:
+class iMastermind:
     """
     Product interface. Can be subclassed to concrete products to be used in actual games
     """
@@ -23,7 +23,7 @@ class Mastermind:
 
     def on_user_input(self, op_code: OpCode, game_input: [int]):
         """
-        Controller of Mastermind functions.
+        Controller of iMastermind functions.
         """
         if op_code == OpCode.RESET:
             self.reset()

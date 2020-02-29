@@ -4,7 +4,7 @@ from pyarcade.mastermind.mastermind import *
 class InputManager:
     """ A class managing all user inputs """
     def __init__(self, game_type: GameType):
-        self.mastermind = Mastermind(game_type=game_type)
+        self.mastermind = iMastermind(game_type=game_type)
         self.game_type = game_type
 
     def parse_input(self, input_string: str):
