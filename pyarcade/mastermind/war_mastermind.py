@@ -22,11 +22,12 @@ class Card:
 class WarMastermind(iMastermind):
     def __init__(self):
         super().__init__()
+        # for the card arrays, index 0 are considered top of deck
         self.player_cards = []
         self.dealer_cards = []
-        self.player_faceup = []
-        self.dealer_faceup = []
-        self.standby = []
+        self.card_pool = []
+        self.player_win = False
+        self.dealer_win = False
 
         self.prepare_cards()
 
@@ -42,91 +43,62 @@ class WarMastermind(iMastermind):
         self.dealer_cards = cards
 
     def execute_input(self, game_input: [int]):
+        player_card = self.player_cards.pop(0)
+        dealer_card = self.dealer_cards.pop(0)
+        self.card_pool = [player_card, dealer_card]
 
-        if self.player_cards and self.dealer_cards:
-            player_card = self.player_cards.pop()
-            dealer_card = self.dealer_cards.pop()
-            if player_card.value == dealer_card.value:
-                while player_card.value == dealer_card.value:
-                    self.standby.append(player_card)
-                    self.standby.append(dealer_card)
-                    if len(self.player_cards) == 0:
-                        print("Player Lost!")
-                        self.standby.clear()
-                        self.update_ui()
-                        return False
-                    self.standby.append(self.player_cards.pop())
-                    if len(self.dealer_cards) == 0:
-                        print("Player Win!")
-                        self.standby.clear()
-                        self.update_ui()
-                        return False
-                    self.standby.append(self.dealer_cards.pop())
-                    if len(self.player_cards) == 0:
-                        print("Player Lost!")
-                        self.standby.clear()
-                        self.update_ui()
-                        return False
-                    player_card = self.player_cards.pop()
-                    if len(self.dealer_cards) == 0:
-                        print("Player Win!")
-                        self.standby.clear()
-                        self.update_ui()
-                        return False
-                    dealer_card = self.dealer_cards.pop()
+        if player_card == dealer_card:
+            self.war()
+        elif player_card > dealer_card:
+            self.player_cards.extend(self.card_pool)
+            self.card_pool = []
+            self.check_win()
+        elif dealer_card > player_card:
+            self.dealer_cards.extend(self.card_pool)
+            self.card_pool = []
+            self.check_win()
 
-            if player_card.value > dealer_card.value:
-                self.standby.append(player_card)
-                self.standby.append(dealer_card)
-                self.player_faceup.extend(self.standby)
-                print("Player get the cards:" + str(len(self.standby)))
-                self.standby.clear()
-                self.update_ui()
-                return True
-            else:
-                self.standby.append(player_card)
-                self.standby.append(dealer_card)
-                self.dealer_faceup.extend(self.standby)
-                print("Dealer get the cards:" + str(len(self.standby)))
-                self.standby.clear()
-                self.update_ui()
-                return True
+    def war(self):
+        self.check_win()
+        if self.dealer_win or self.player_win:
+            return
 
-        elif len(self.player_cards) == 0:
-            if len(self.player_faceup) == 0:
-                print("Player Lost !")
-                return False
-            random.shuffle(self.player_faceup)
-            self.player_cards.extend(self.player_faceup)
-            self.player_faceup.clear()
-            self.play_war("go")
-            self.update_ui(self)
-            return True
+        self.card_pool.append(self.player_cards.pop(0))  # The player's face down card
+        self.card_pool.append(self.dealer_cards.pop(0))  # Dealer's face down card
 
-        elif len(self.dealer_cards) == 0:
-            if len(self.dealer_faceup) == 0:
-                print("Player Win !")
-                self.update_ui(self)
-                return False
-            random.shuffle(self.dealer_faceup)
-            self.dealer_cards.extend(self.dealer_faceup)
-            self.dealer_faceup.clear()
-            self.play_war("go")
-            self.update_ui()
-            return True
+        player_face_up = self.player_cards.pop(0)
+        dealer_face_up = self.dealer_cards.pop(0)
+
+        self.card_pool.append(player_face_up)
+        self.card_pool.append(dealer_face_up)
+
+        if player_face_up == dealer_face_up:
+            self.war()
+        elif player_face_up > dealer_face_up:
+            self.player_cards.extend(self.card_pool)
+            self.card_pool = []
+        elif dealer_face_up > player_face_up:
+            self.dealer_cards.extend(self.card_pool)
+            self.card_pool = []
 
     def check_win(self):
         """
         Called by on_user_input after execute_input() to check if user has won the game
         """
-        raise NotImplementedError
+        if 2 > len(self.player_cards) != len(self.dealer_cards):
+            self.dealer_win = True
+        elif 2 > len(self.dealer_cards) != len(self.player_cards):
+            self.player_win = True
+        elif len(self.dealer_cards) == len(self.player_cards) == 0:
+            # If cards runs out during war, the player ties with dealer
+            self.dealer_win = True
+            self.player_win = True
 
     def update_ui(self):
         raise NotImplementedError
 
     def reset(self):
-        self.player_cards = []
-        self.dealer_cards = []
-        self.player_faceup = []
-        self.dealer_faceup = []
-        self.standby = []
+        self.prepare_cards()
+        self.card_pool = []
+        self.player_win = False
+        self.dealer_win = False
