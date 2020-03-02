@@ -1,6 +1,5 @@
 import unittest
-from pyarcade.ui import ui
-import curses
+from pyarcade import ui
 
 
 class UITestCase(unittest.TestCase):
