@@ -1,63 +1,152 @@
 import curses
+from curses import panel
+from os import system
+from pyarcade import client
 
 
-menu = ["Home", "Play War", "Play Mine Sweeper", "Play Bulls and Cows", "Scoreboard", "Exit"]
+class Menu(object):
+
+    def __init__(self, items, stdscreen):
+        self.window = stdscreen.subwin(0,0)
+        self.window.keypad(1)
+        self.panel = panel.new_panel(self.window)
+        self.panel.hide()
+        panel.update_panels()
+
+        self.position = 0
+        self.items = items
+        self.items.append(('Exit', 'Exit'))
+
+    def navigate(self, n):
+        self.position += n
+        if self.position < 0:
+            self.position = 0
+        elif self.position >= len(self.items):
+            self.position = len(self.items)-1
+
+    def display(self):
+        self.panel.top()
+        self.panel.show()
+        self.window.clear()
+
+        while True:
+            self.window.refresh()
+            curses.doupdate()
+            for index, item in enumerate(self.items):
+                if index == self.position:
+                    mode = curses.A_REVERSE
+                else:
+                    mode = curses.A_NORMAL
+
+                msg = '%d. %s' % (index, item[0])
+                self.window.addstr(1+index, 1, msg, mode)
+
+            key = self.window.getch()
+
+            if key in [curses.KEY_ENTER, ord('\n')]:
+                if self.position == len(self.items)-1:
+                    break
+                else:
+                    if self.position == 0:
+                        self.window.clear()
+                        War(self.window).display()
+
+            elif key == curses.KEY_UP:
+                self.navigate(-1)
+
+            elif key == curses.KEY_DOWN:
+                self.navigate(1)
+
+        self.window.clear()
+        self.panel.hide()
+        panel.update_panels()
+        curses.doupdate()
 
 
-def print_menu(stdscr, select_row_idx):
-    stdscr.clear()
-    h, w = stdscr.getmaxyx()
+class War(object):
+    def __init__(self, stdscreen):
+        self.window = stdscreen.subwin(0, 0)
+        self.window.keypad(1)
+        self.panel = panel.new_panel(self.window)
+        self.panel.hide()
+        panel.update_panels()
 
-    for idx, row in enumerate(menu):
-        x = w//2 -len(row)//2
-        y = h//2 - len(menu)//2 + idx
-        if idx == select_row_idx:
-            stdscr.attron(curses.color_pair(1))
-            stdscr.addstr(y, x, row)
-            stdscr.attroff(curses.color_pair(1))
-        else:
-            stdscr.addstr(y, x, row)
+        self.position = 0
 
-    stdscr.refresh()
+        self.items = [('War Game', 'War Game')]
+        self.items.append(('Exit', 'Exit'))
+
+    def navigate(self, n):
+        self.position += n
+        if self.position < 0:
+            self.position = 0
+        elif self.position >= len(self.items):
+            self.position = len(self.items)-1
+
+    def display(self):
+        self.panel.top()
+        self.panel.show()
+        self.window.clear()
+
+        while True:
+            self.window.refresh()
+            curses.doupdate()
+            for index, item in enumerate(self.items):
+                if index == self.position:
+                    mode = curses.A_REVERSE
+                else:
+                    mode = curses.A_NORMAL
+
+                msg = '%d. %s' % (index, item[0])
+                self.window.addstr(1 + index, 1, msg, mode)
+
+            key = self.window.getch()
+
+            if key in [curses.KEY_ENTER, ord('\n')]:
+                if self.position == 1:
+                    break
+            elif key == curses.KEY_UP:
+                self.navigate(-1)
+
+            elif key == curses.KEY_DOWN:
+                self.navigate(1)
+            #curses.echo()
+            #user_input = self.window.getstr(3, 0)
+
+            #self.window.addstr(7, 0, user_input)
+
+        self.window.clear()
+        self.panel.hide()
+        panel.update_panels()
+        curses.doupdate()
 
 
-def main(stdscr):
+class MyApp(object):
 
-    curses.curs_set(0)
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    current_row_idx = 0
+    def __init__(self, stdscreen):
+        self.screen = stdscreen
+        curses.curs_set(0)
 
-    print_menu(stdscr, current_row_idx)
+        submenu_items = [
+                ('beep', curses.beep),
+                ('flash', curses.flash)
+                ]
+        submenu = Menu(submenu_items, self.screen)
 
-    while 1:
-        key = stdscr.getch()
+        main_menu_items = [
+                ('Play War', 'Play War'),
+                ('Play BullandCow', 'Play BullandCow'),
+                ('Play Mine Sweeper', 'Play Mine Sweeper')
+                ]
+        main_menu = Menu(main_menu_items, self.screen)
+        main_menu.display()
 
-        stdscr.clear()
 
-        if key == curses.KEY_UP and current_row_idx > 0:
-            current_row_idx -= 1
-        elif key == curses.KEY_DOWN:
-            current_row_idx += 1
-        elif key == curses.KEY_ENTER or key in [10, 13]:
-             stdscr.clear()
-             stdscr.addstr(0, 0, "Eneter")
-             stdscr.refresh()
-             stdscr()
+if __name__ == '__main__':
+    curses.wrapper(MyApp)
 
-        print_menu(stdscr, current_row_idx)
 
-        stdscr.refresh()
 
-def war(stdscr):
-    pass
-
-def bullandcow(stdscr):
-    pass
-
-def mine_sweeper(stdscr):
-    pass
-
-curses.wrapper(main)
 
 
 
