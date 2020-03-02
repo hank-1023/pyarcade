@@ -1,95 +1,73 @@
 import curses
 from curses import panel
 from os import system
-from pyarcade import client
+from pyarcade.client import Client
+from pyarcade.client import GameType
 
 
 class Menu(object):
 
-    def __init__(self, items, stdscreen):
+    def __init__(self, stdscreen):
         self.window = stdscreen.subwin(0,0)
         self.window.keypad(1)
         self.panel = panel.new_panel(self.window)
         self.panel.hide()
         panel.update_panels()
-
+        self.game = Client()
         self.position = 0
-        self.items = items
-        self.items.append(('Exit', 'Exit'))
 
-    def navigate(self, n):
+    def navigate(self, n, x):
         self.position += n
         if self.position < 0:
             self.position = 0
-        elif self.position >= len(self.items):
-            self.position = len(self.items)-1
+        elif self.position >= x:
+            self.position = x-1
 
-    def display(self):
+    def main_menu(self):
+        items = ['Play Bull and Cow', 'Play War', 'Play Mine Sweeper', 'Exit']
         self.panel.top()
         self.panel.show()
         self.window.clear()
 
-        i = 1
         while True:
             self.window.refresh()
             curses.doupdate()
-            for index, item in enumerate(self.items):
+            for index, item in enumerate(items):
                 if index == self.position:
                     mode = curses.A_REVERSE
                 else:
                     mode = curses.A_NORMAL
 
-                msg = '%d. %s' % (index, item[0])
-                self.window.addstr(1+index, i, msg, mode)
+                msg = '%d. %s' % (index, item)
+                self.window.addstr(1+index, 1, msg, mode)
 
             key = self.window.getch()
 
             if key in [curses.KEY_ENTER, ord('\n')]:
-                if self.position == len(self.items)-1:
+                if self.position == 3:
                     break
                 else:
                     if self.position == 0:
-                        self.window.clear()
-                        War(self.window).display()
-                        i += 1
-                    else:
-                        self.items[self.position][1]()
+                        self.bull_and_cow_user_infterface()
 
             elif key == curses.KEY_UP:
-                self.navigate(-1)
+                self.navigate(-1, 4)
 
             elif key == curses.KEY_DOWN:
-                self.navigate(1)
+                self.navigate(1, 4)
 
         self.window.clear()
         self.panel.hide()
         panel.update_panels()
         curses.doupdate()
 
-
-class War(object):
-    def __init__(self, stdscreen):
-        self.window = stdscreen.subwin(1, 1)
-        self.window.keypad(1)
-        self.panel = panel.new_panel(self.window)
-        self.panel.hide()
-        panel.update_panels()
-        self.position = 0
-
-    def navigate(self, n):
-        self.position += n
-        if self.position < 0:
-            self.position = 0
-        elif self.position >= 2:
-            self.position = 1
-
-    def display(self):
-        menu = [ ('War Game', 'War Game') ]
-        menu.append(('Exit', 'Exit'))
+    def bull_and_cow_user_infterface(self):
+        menu = [ 'Bulls and Cows',
+                 'My guess:', 'Exit']
         self.panel.top()
         self.panel.show()
         self.window.clear()
-
+        self.game.start_game(GameType.HIDDEN_SEQUENCE)
         while True:
             self.window.refresh()
             curses.doupdate()
@@ -99,31 +77,34 @@ class War(object):
                 else:
                     mode = curses.A_NORMAL
 
-                msg = '%d. %s' % (index, item[0])
+                msg = '%d. %s' % (index, item)
                 self.window.addstr(1 + index, 1, msg, mode)
 
             key = self.window.getch()
 
             if key in [curses.KEY_ENTER, ord('\n')]:
-                if self.position == 1:
+                if self.position == 2:
                     break
-                else:
-                    self.window.addstr(4, 4, "Useless press")
-
+                elif self.position == 1:
+                    key2 = self.window.getch()
+                    curses.echo()
+                    user_input = self.window.getstr(2, 13)
+                    self.window.addstr(2, 13, user_input)
+                    if key2 == curses.KEY_ENTER:
+                        self.game.parse_execute_input(user_input)
+                        self.window.addstr(7, 3, "fuck you")
+                        self.window.addstr(7, 3, self.game.get_display_data())
             elif key == curses.KEY_UP:
-                self.navigate(-1)
+                self.navigate(-1, 3)
 
             elif key == curses.KEY_DOWN:
-                self.navigate(1)
-            #curses.echo()
-            #user_input = self.window.getstr(3, 0)
-
-            #self.window.addstr(7, 0, user_input)
+                self.navigate(1, 3)
 
         self.window.clear()
         self.panel.hide()
         panel.update_panels()
         curses.doupdate()
+        self.main_menu()
 
 
 class MyApp(object):
@@ -132,19 +113,8 @@ class MyApp(object):
         self.screen = stdscreen
         curses.curs_set(0)
 
-        submenu_items = [
-                ('beep', curses.beep),
-                ('flash', curses.flash)
-                ]
-        submenu = Menu(submenu_items, self.screen)
-
-        main_menu_items = [
-                ('Play War', 'Play War'),
-                ('Play BullandCow', 'Play BullandCow'),
-                ('Play Mine Sweeper', 'Play BullandCow')
-                ]
-        main_menu = Menu(main_menu_items, self.screen)
-        main_menu.display()
+        main_menu = Menu(self.screen)
+        main_menu.main_menu()
 
 
 if __name__ == '__main__':
