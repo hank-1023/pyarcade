@@ -34,7 +34,7 @@ class iMastermind:
         """
         raise NotImplementedError
 
-    def get_display_data(self):
+    def get_display_string(self) -> str:
         raise NotImplementedError
 
     def reset(self):

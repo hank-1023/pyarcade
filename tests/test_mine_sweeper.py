@@ -2,7 +2,7 @@ import unittest
 from pyarcade.mastermind.mine_sweeper_mastermind import *
 
 
-class MastermindTestCase(unittest.TestCase):
+class MineSweeperMastermindTestCase(unittest.TestCase):
     def test_mine_sweeper_init(self):
         mastermind = MineSweeperMastermind()
         self.assertEqual(len(mastermind.display_board), 4)
@@ -62,6 +62,22 @@ class MastermindTestCase(unittest.TestCase):
         self.assertEqual(mastermind.game_state, GameState.WIN)
         self.assertEqual(mastermind.all_history["Win"], 1)
         self.assertEqual(mastermind.all_history["Lose"], 0)
+
+    def test_mine_sweeper_get_display_string(self):
+        mastermind = MineSweeperMastermind()
+        mastermind.game_matrix = [[0, 0, 0, 0, 0, 0],
+                                  [0, 0, 0, 1, 1, 0],
+                                  [0, 0, 1, 2, -1, 0],
+                                  [0, 0, 1, -1, 2, 0],
+                                  [0, 0, 1, 1, 1, 0],
+                                  [0, 0, 0, 0, 0, 0]]
+        mastermind.execute_input([0, 2])
+        desired_str = "['x', 'x', '1', 'x']\n" \
+                      "['x', 'x', 'x', 'x']\n" \
+                      "['x', 'x', 'x', 'x']\n" \
+                      "['x', 'x', 'x', 'x']\n"
+
+        self.assertEqual(desired_str, mastermind.get_display_string())
 
     def test_mine_sweeper_reset(self):
         mastermind = MineSweeperMastermind()
