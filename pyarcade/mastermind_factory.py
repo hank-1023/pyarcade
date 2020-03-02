@@ -1,4 +1,3 @@
-from pyarcade.imastermind import *
 from pyarcade.mastermind.hidden_sequence_mastermind import *
 from pyarcade.mastermind.mine_sweeper_mastermind import *
 from pyarcade.mastermind.war_mastermind import *

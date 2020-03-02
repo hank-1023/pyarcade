@@ -18,17 +18,16 @@ class iMastermind:
 
     def execute_input(self, game_input: [int]):
         """
-
+        execute input parsed from client, should modify various
+        member variables to indicate game state
         Args:
             game_input: the parsed game input
-        Returns:
-
         """
         raise NotImplementedError
 
     def check_win(self):
         """
-        Called by on_user_input after execute_input() to check if user has won the game
+        Called by execute_input() to check if user has won the game
         Should update self.game_state
         """
         raise NotImplementedError
