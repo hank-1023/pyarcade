@@ -29,6 +29,7 @@ class Menu(object):
         self.panel.show()
         self.window.clear()
 
+        i = 1
         while True:
             self.window.refresh()
             curses.doupdate()
@@ -39,7 +40,7 @@ class Menu(object):
                     mode = curses.A_NORMAL
 
                 msg = '%d. %s' % (index, item[0])
-                self.window.addstr(1+index, 1, msg, mode)
+                self.window.addstr(1+index, i, msg, mode)
 
             key = self.window.getch()
 
@@ -50,6 +51,7 @@ class Menu(object):
                     if self.position == 0:
                         self.window.clear()
                         War(self.window).display()
+                        i += 1
                     else:
                         self.items[self.position][1]()
 
@@ -67,25 +69,23 @@ class Menu(object):
 
 class War(object):
     def __init__(self, stdscreen):
-        self.window = stdscreen.subwin(0, 0)
+        self.window = stdscreen.subwin(1, 1)
         self.window.keypad(1)
         self.panel = panel.new_panel(self.window)
         self.panel.hide()
         panel.update_panels()
-
         self.position = 0
-
-        self.items = [('War Game', 'War Game')]
-        self.items.append(('Exit', 'Exit'))
 
     def navigate(self, n):
         self.position += n
         if self.position < 0:
             self.position = 0
-        elif self.position >= len(self.items):
-            self.position = len(self.items)-1
+        elif self.position >= 2:
+            self.position = 1
 
     def display(self):
+        menu = [ ('War Game', 'War Game') ]
+        menu.append(('Exit', 'Exit'))
         self.panel.top()
         self.panel.show()
         self.window.clear()
@@ -93,7 +93,7 @@ class War(object):
         while True:
             self.window.refresh()
             curses.doupdate()
-            for index, item in enumerate(self.items):
+            for index, item in enumerate(menu):
                 if index == self.position:
                     mode = curses.A_REVERSE
                 else:
@@ -107,6 +107,9 @@ class War(object):
             if key in [curses.KEY_ENTER, ord('\n')]:
                 if self.position == 1:
                     break
+                else:
+                    self.window.addstr(4, 4, "Useless press")
+
             elif key == curses.KEY_UP:
                 self.navigate(-1)
 
