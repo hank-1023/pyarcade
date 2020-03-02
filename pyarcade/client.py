@@ -1,4 +1,5 @@
-from pyarcade.mastermind.mastermind_factory import *
+from pyarcade.mastermind_factory import *
+from pyarcade.imastermind import *
 
 
 class GameType(Enum):
@@ -9,6 +10,11 @@ class GameType(Enum):
 
 class Client:
     def __init__(self, game_type: GameType):
+        self.game_type = None
+        self.mastermind_creator = None
+        self.all_history = {"Win": 0, "Lose": 0}
+
+    def start_game(self, game_type: GameType):
         self.game_type = game_type
         if game_type == GameType.HIDDEN_SEQUENCE:
             self.mastermind_creator = HiddenSequenceMastermindCreator()
@@ -55,4 +61,4 @@ class Client:
         return self.mastermind_creator.get_guess_history()
 
     def get_all_history(self):
-        return self.mastermind_creator.get_all_history()
+        return self.all_history

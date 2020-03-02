@@ -1,5 +1,5 @@
 from random import random
-from pyarcade.mastermind.mastermind import *
+from pyarcade.imastermind import *
 
 
 class HiddenSequenceMastermind(iMastermind):

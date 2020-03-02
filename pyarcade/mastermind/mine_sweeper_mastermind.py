@@ -1,5 +1,5 @@
 import random
-from pyarcade.mastermind.mastermind import *
+from pyarcade.imastermind import *
 
 
 class MineSweeperMastermind(iMastermind):

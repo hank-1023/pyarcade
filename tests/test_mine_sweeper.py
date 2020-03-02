@@ -1,5 +1,6 @@
 import unittest
 from pyarcade.mastermind.mine_sweeper_mastermind import *
+from pyarcade.imastermind import *
 
 
 class MineSweeperMastermindTestCase(unittest.TestCase):

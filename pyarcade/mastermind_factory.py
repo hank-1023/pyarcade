@@ -3,7 +3,7 @@ from pyarcade.mastermind.mine_sweeper_mastermind import *
 from pyarcade.mastermind.war_mastermind import *
 
 
-class MastermindCreator:
+class iMastermindCreator:
     def __init__(self):
         self.mastermind = self.create_mastermind()
 
@@ -33,16 +33,16 @@ class MastermindCreator:
         self.mastermind.clear_history()
 
 
-class HiddenSequenceMastermindCreator(MastermindCreator):
+class HiddenSequenceMastermindCreator(iMastermindCreator):
     def create_mastermind(self) -> HiddenSequenceMastermind:
         return HiddenSequenceMastermind()
 
 
-class MineSweeperMastermindCreator(MastermindCreator):
+class MineSweeperMastermindCreator(iMastermindCreator):
     def create_mastermind(self) -> MineSweeperMastermind:
         return MineSweeperMastermind()
 
 
-class WarGameMastermindCreator(MastermindCreator):
+class WarGameMastermindCreator(iMastermindCreator):
     def create_mastermind(self) -> iMastermind:
         return WarMastermind()
