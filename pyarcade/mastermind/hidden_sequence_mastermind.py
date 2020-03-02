@@ -48,5 +48,6 @@ class HiddenSequenceMastermind(iMastermind):
 
     def reset(self):
         self.current_hidden_sequence = self.generate_hidden_sequence()
+        self.current_result = None
         self.game_state = GameState.PENDING
         self.guess_history = []

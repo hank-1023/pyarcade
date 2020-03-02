@@ -86,3 +86,4 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
         self.assertEqual(len(mastermind.game_matrix), 6)
         self.assertEqual(len(mastermind.game_matrix[0]), 6)
         self.assertEqual(mastermind.guess_history, [])
+        self.assertEqual(mastermind.game_state, GameState.PENDING)

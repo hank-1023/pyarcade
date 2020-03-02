@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pyarcade.mastermind_factory import *
 from pyarcade.imastermind import *
 
@@ -10,8 +12,8 @@ class GameType(Enum):
 
 class Client:
     def __init__(self):
-        self.game_type = None
-        self.mastermind_creator = None
+        self.game_type: Optional[GameType] = None
+        self.mastermind_creator: Optional[iMastermindCreator] = None
         self.all_history = {"Win": 0, "Lose": 0}
 
     def start_game(self, game_type: GameType):
@@ -55,10 +57,13 @@ class Client:
             self.update_all_history()
 
     def update_all_history(self):
-        if self.mastermind_creator.get_game_state == GameState.WIN:
+        if self.mastermind_creator.get_game_state() == GameState.WIN:
             self.all_history["Win"] += 1
-        elif self.mastermind_creator.get_game_state == GameState.LOSE:
+        elif self.mastermind_creator.get_game_state() == GameState.LOSE:
             self.all_history["Lose"] += 1
+
+    def get_mastermind_local_history(self):
+        return self.mastermind_creator.get_guess_history()
 
     def get_all_history(self):
         return self.all_history

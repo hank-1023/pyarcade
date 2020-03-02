@@ -33,10 +33,6 @@ class WarMastermind(iMastermind):
         self.prepare_cards()
 
     def prepare_cards(self):
-        """
-        This is the method we use to give cards to player and dealer
-        :return: cards for player, cards for dealer
-        """
         self.player_deck = [Card(s, r) for s in CARD_SUITE for r in RANK_SEQUENCE]
         random.shuffle(self.player_deck)
         self.dealer_deck = [Card(s, r) for s in CARD_SUITE for r in RANK_SEQUENCE]
@@ -87,6 +83,7 @@ class WarMastermind(iMastermind):
         """
         if 2 > len(self.player_deck) != len(self.dealer_deck):
             self.dealer_win = True
+            self.game_state = GameState.LOSE
         elif 2 > len(self.dealer_deck) != len(self.player_deck):
             self.player_win = True
             self.game_state = GameState.WIN
