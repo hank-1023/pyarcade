@@ -1,11 +1,8 @@
-from pyarcade.input_system import *
+import curses
 
 
-def run_pyarcade(game_type: GameType):
+def run_pyarcade():
     """ This will effectively become our program entrypoint.
     """
-    input_manager = InputManager(game_type)
+    screen = curses.initscr()
 
-
-if __name__ == "__main__":
-    run_pyarcade(GameType.HIDDEN_SEQUENCE)
