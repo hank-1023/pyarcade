@@ -44,7 +44,8 @@ class MineSweeperMastermind(iMastermind):
             game_input: list with len = 2: row, column to detonate the bomb
         """
         if not all(n < self.board_size for n in game_input):
-            raise ValueError("input outside of board_range")
+            # Since invalid inputs are ignored
+            return
 
         # Add to guess history
         if game_input not in self.guess_history:

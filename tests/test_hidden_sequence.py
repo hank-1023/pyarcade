@@ -36,6 +36,7 @@ class HiddenSequenceMastermindTestCase(unittest.TestCase):
         self.assertEqual(correct, [0, 1, 2, 3])
         self.assertEqual(misplaced, [])
         self.assertEqual(nowhere, [])
+        self.assertEqual(mastermind.game_state, GameState.WIN)
 
     def test_hidden_sequence_get_display_string(self):
         mastermind = HiddenSequenceMastermind()

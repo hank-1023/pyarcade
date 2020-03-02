@@ -20,6 +20,7 @@ class WarMastermindTestCase(unittest.TestCase):
 
         self.assertTrue(mastermind.dealer_win)
         self.assertTrue(mastermind.player_win)
+        self.assertEqual(mastermind.game_state, GameState.TIE)
 
     def test_war_execute_input_reverse_sorted(self):
         mastermind = WarMastermind()
@@ -47,6 +48,7 @@ class WarMastermindTestCase(unittest.TestCase):
 
         self.assertTrue(mastermind.player_win)
         self.assertFalse(mastermind.dealer_win)
+        self.assertEqual(mastermind.game_state, GameState.WIN)
 
     def test_war_execute_input_dealer_advantage(self):
         # Making sure the dealer wins the game
@@ -62,6 +64,7 @@ class WarMastermindTestCase(unittest.TestCase):
 
         self.assertFalse(mastermind.player_win)
         self.assertTrue(mastermind.dealer_win)
+        self.assertEqual(mastermind.game_state, GameState.LOSE)
 
     def test_war_get_display_string(self):
         mastermind = WarMastermind()
@@ -85,3 +88,4 @@ class WarMastermindTestCase(unittest.TestCase):
         self.assertFalse(mastermind.dealer_win)
         self.assertEqual(len(mastermind.dealer_deck), 52)
         self.assertEqual(len(mastermind.player_deck), 52)
+        self.assertEqual(mastermind.game_state, GameState.PENDING)
