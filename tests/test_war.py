@@ -2,7 +2,7 @@ import unittest
 from pyarcade.mastermind.war_mastermind import *
 
 
-class MastermindTestCase(unittest.TestCase):
+class WarMastermindTestCase(unittest.TestCase):
     def test_war_prepare_cards(self):
         mastermind = WarMastermind()
         dealer_deck_length = len(mastermind.dealer_deck)
@@ -68,6 +68,18 @@ class MastermindTestCase(unittest.TestCase):
         self.assertTrue(mastermind.dealer_win)
         self.assertEqual(mastermind.all_history["Win"], 0)
         self.assertEqual(mastermind.all_history["Lose"], 1)
+
+    def test_war_get_display_string(self):
+        mastermind = WarMastermind()
+        # Intentionally make the two deck the same
+        mastermind.dealer_deck = [Card(s, r) for s in CARD_SUITE for r in RANK_SEQUENCE]
+        mastermind.player_deck = [Card(s, r) for s in CARD_SUITE for r in RANK_SEQUENCE]
+
+        desired_str = "Player deck: [('H', '2'), ('H', '3'), ('H', '4'), ('H', '5')] ...\n" \
+                      "Dealer deck: [('H', '2'), ('H', '3'), ('H', '4'), ('H', '5')] ...\n" \
+                      "Card pool: []"
+
+        self.assertEqual(mastermind.get_display_string(), desired_str)
 
     def test_war_reset(self):
         mastermind = WarMastermind()
