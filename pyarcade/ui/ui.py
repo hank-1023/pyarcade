@@ -50,6 +50,8 @@ class Menu(object):
                     if self.position == 0:
                         self.window.clear()
                         War(self.window).display()
+                    else:
+                        self.items[self.position][1]()
 
             elif key == curses.KEY_UP:
                 self.navigate(-1)
@@ -136,7 +138,7 @@ class MyApp(object):
         main_menu_items = [
                 ('Play War', 'Play War'),
                 ('Play BullandCow', 'Play BullandCow'),
-                ('Play Mine Sweeper', 'Play Mine Sweeper')
+                ('Play Mine Sweeper', 'Play BullandCow')
                 ]
         main_menu = Menu(main_menu_items, self.screen)
         main_menu.display()
