@@ -20,8 +20,6 @@ class WarMastermindTestCase(unittest.TestCase):
 
         self.assertTrue(mastermind.dealer_win)
         self.assertTrue(mastermind.player_win)
-        self.assertEqual(mastermind.all_history["Win"], 0)
-        self.assertEqual(mastermind.all_history["Lose"], 0)
 
     def test_war_execute_input_reverse_sorted(self):
         mastermind = WarMastermind()
@@ -49,8 +47,6 @@ class WarMastermindTestCase(unittest.TestCase):
 
         self.assertTrue(mastermind.player_win)
         self.assertFalse(mastermind.dealer_win)
-        self.assertEqual(mastermind.all_history["Win"], 1)
-        self.assertEqual(mastermind.all_history["Lose"], 0)
 
     def test_war_execute_input_dealer_advantage(self):
         # Making sure the dealer wins the game
@@ -66,8 +62,6 @@ class WarMastermindTestCase(unittest.TestCase):
 
         self.assertFalse(mastermind.player_win)
         self.assertTrue(mastermind.dealer_win)
-        self.assertEqual(mastermind.all_history["Win"], 0)
-        self.assertEqual(mastermind.all_history["Lose"], 1)
 
     def test_war_get_display_string(self):
         mastermind = WarMastermind()

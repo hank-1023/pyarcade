@@ -1,5 +1,6 @@
 import random
-from pyarcade.mastermind.mastermind import *
+
+from pyarcade.imastermind import *
 
 
 class MineSweeperMastermind(iMastermind):
@@ -61,12 +62,10 @@ class MineSweeperMastermind(iMastermind):
 
     def check_win(self):
         if self.game_state == GameState.LOSE:
-            self.all_history["Lose"] += 1
             return
 
         if sum(sublist.count("x") for sublist in self.display_board) == self.bomb_num:
             self.game_state = GameState.WIN
-            self.all_history["Win"] += 1
 
     def get_display_string(self) -> str:
         result_str = ""

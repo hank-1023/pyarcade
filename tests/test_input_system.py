@@ -1,6 +1,5 @@
 import unittest
 from pyarcade.input_system import *
-from pyarcade.mastermind.mastermind import *
 
 
 class TestInputSystem(unittest.TestCase):
