@@ -15,7 +15,6 @@ class iMastermind:
     def __init__(self):
         self.game_state = GameState.PENDING
         self.guess_history = []
-        self.all_history = {"Win": 0, "Lose": 0}
 
     def execute_input(self, game_input: [int]):
         """
@@ -39,7 +38,4 @@ class iMastermind:
 
     def reset(self):
         raise NotImplementedError
-
-    def clear_history(self):
-        self.all_history = {"Win": 0, "Lose": 0}
 
