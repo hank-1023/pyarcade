@@ -94,13 +94,23 @@ class WarMastermind(iMastermind):
             self.game_state = GameState.TIE
 
     def get_display_string(self) -> str:
-        player_deck_in_tuple = [(c.suite, c.rank) for c in self.player_deck][0:4]
-        dealer_deck_in_tuple = [(c.suite, c.rank) for c in self.dealer_deck][0:4]
+        player_deck_in_tuple = [(c.suite, c.rank) for c in self.player_deck]
+        dealer_deck_in_tuple = [(c.suite, c.rank) for c in self.dealer_deck]
         card_pool_in_tuple = [(c.suite, c.rank) for c in self.card_pool]
 
-        return "Player deck: " + str(player_deck_in_tuple) + " ..." + "\n" \
-               + "Dealer deck: " + str(dealer_deck_in_tuple) + " ..." + "\n" \
-               + "Card pool: " + str(card_pool_in_tuple)
+        if len(player_deck_in_tuple) > 5:
+            player_deck_string = str(player_deck_in_tuple[0:5]) + " ..."
+        else:
+            player_deck_string = str(player_deck_in_tuple)
+
+        if len(dealer_deck_in_tuple) > 5:
+            dealer_deck_string = str(dealer_deck_in_tuple[0:5]) + " ..."
+        else:
+            dealer_deck_string = str(dealer_deck_in_tuple)
+
+        return "Player deck: " + player_deck_string + "\n" + \
+               "Dealer deck: " + dealer_deck_string + "\n" + \
+               "Card pool: " + str(card_pool_in_tuple)
 
     def reset(self):
         self.prepare_cards()
