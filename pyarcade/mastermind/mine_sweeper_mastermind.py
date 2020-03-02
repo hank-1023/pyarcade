@@ -68,8 +68,12 @@ class MineSweeperMastermind(iMastermind):
             self.game_state = GameState.WIN
             self.all_history["Win"] += 1
 
-    def get_display_data(self):
-        return self.display_board
+    def get_display_string(self) -> str:
+        result_str = ""
+        for arr in self.display_board:
+            result_str += str(arr) + "\n"
+
+        return result_str
 
     def reset(self):
         self.game_matrix = self.init_game_matrix()

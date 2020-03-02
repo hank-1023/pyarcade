@@ -17,8 +17,8 @@ class MastermindCreator:
     def reset(self):
         self.mastermind.reset()
 
-    def get_display_data(self):
-        return self.mastermind.get_display_data()
+    def get_display_string(self) -> str:
+        return self.mastermind.get_display_string()
 
     def get_game_state(self) -> GameState:
         return self.mastermind.game_state

@@ -38,8 +38,13 @@ class HiddenSequenceMastermind(iMastermind):
             self.game_state = GameState.WIN
             self.all_history["Win"] += 1
 
-    def get_display_data(self):
-        return self.current_result
+    def get_display_string(self) -> str:
+        correct_digits = [x + 1 for x in self.current_result[0]]
+        misplaced_digits = [x + 1 for x in self.current_result[1]]
+        not_existed_digits = [x + 1 for x in self.current_result[2]]
+        return "Correct digits: " + str(correct_digits) + "\n" \
+               + "Misplaced digits: " + str(misplaced_digits) + "\n" \
+               + "Numbers on these digits are not existed: " + str(not_existed_digits)
 
     def reset(self):
         self.current_hidden_sequence = self.generate_hidden_sequence()
