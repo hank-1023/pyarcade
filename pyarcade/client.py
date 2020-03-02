@@ -9,7 +9,7 @@ class GameType(Enum):
 
 
 class Client:
-    def __init__(self, game_type: GameType):
+    def __init__(self):
         self.game_type = None
         self.mastermind_creator = None
         self.all_history = {"Win": 0, "Lose": 0}
@@ -37,28 +37,37 @@ class Client:
         if input_string == "reset":
             self.mastermind_creator.reset()
         elif input_string == "clear":
-            self.mastermind_creator.clear_history()
+            self.clear_all_history()
         elif self.game_type == GameType.HIDDEN_SEQUENCE \
                 and input_string.isnumeric() and len(input_string) == 4:
             int_array = [int(i) for i in input_string]
             self.mastermind_creator.execute_input(int_array)
+            self.update_all_history()
         elif self.game_type == GameType.MINE_SWEEPER:
             # Check if the input are two numbers separated by ','
             split_arr = [i.strip() for i in input_string.split(',')]
             if len(split_arr) == 2 and split_arr[0].isnumeric() and split_arr[1].isnumeric():
                 int_array = [int(i) for i in split_arr]
                 self.mastermind_creator.execute_input(int_array)
+                self.update_all_history()
         elif self.game_type == GameType.WAR and input_string == "deal":
             self.mastermind_creator.execute_input([])
+            self.update_all_history()
+
+    def update_all_history(self):
+        if self.mastermind_creator.get_game_state == GameState.WIN:
+            self.all_history["Win"] += 1
+        elif self.mastermind_creator.get_game_state == GameState.LOSE:
+            self.all_history["Lose"] += 1
+
+    def get_all_history(self):
+        return self.all_history
+
+    def clear_all_history(self):
+        self.all_history = {"Win": 0, "Lose": 0}
 
     def get_display_data(self):
         return self.mastermind_creator.get_display_string()
 
     def get_game_state(self) -> GameState:
         return self.mastermind_creator.get_game_state()
-
-    def get_guess_history(self):
-        return self.mastermind_creator.get_guess_history()
-
-    def get_all_history(self):
-        return self.all_history

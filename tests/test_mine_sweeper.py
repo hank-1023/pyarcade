@@ -33,8 +33,6 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
                                   [0, 0, 0, 0, 0, 0]]
         mastermind.execute_input([1, 3])
         self.assertEqual(mastermind.game_state, GameState.LOSE)
-        self.assertEqual(mastermind.all_history["Lose"], 1)
-        self.assertEqual(mastermind.all_history["Win"], 0)
 
     def test_mine_sweeper_win(self):
         mastermind = MineSweeperMastermind()
@@ -61,8 +59,6 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
         mastermind.execute_input([3, 3])
 
         self.assertEqual(mastermind.game_state, GameState.WIN)
-        self.assertEqual(mastermind.all_history["Win"], 1)
-        self.assertEqual(mastermind.all_history["Lose"], 0)
 
     def test_mine_sweeper_get_display_string(self):
         mastermind = MineSweeperMastermind()

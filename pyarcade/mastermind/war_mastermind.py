@@ -1,4 +1,5 @@
 import random
+
 from pyarcade.imastermind import *
 
 CARD_SUITE = ["H", "D", "S", "C"]
@@ -86,11 +87,9 @@ class WarMastermind(iMastermind):
         """
         if 2 > len(self.player_deck) != len(self.dealer_deck):
             self.dealer_win = True
-            self.all_history["Lose"] += 1
         elif 2 > len(self.dealer_deck) != len(self.player_deck):
             self.player_win = True
             self.game_state = GameState.WIN
-            self.all_history["Win"] += 1
         elif len(self.dealer_deck) == len(self.player_deck) < 2:
             # If cards runs out during war, the player ties with dealer
             self.dealer_win = True

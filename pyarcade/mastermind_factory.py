@@ -1,3 +1,4 @@
+from pyarcade.imastermind import *
 from pyarcade.mastermind.hidden_sequence_mastermind import *
 from pyarcade.mastermind.mine_sweeper_mastermind import *
 from pyarcade.mastermind.war_mastermind import *
@@ -25,12 +26,6 @@ class iMastermindCreator:
 
     def get_guess_history(self):
         return self.mastermind.guess_history
-
-    def get_all_history(self):
-        return self.mastermind.all_history
-
-    def clear_history(self):
-        self.mastermind.clear_history()
 
 
 class HiddenSequenceMastermindCreator(iMastermindCreator):

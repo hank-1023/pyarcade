@@ -1,4 +1,5 @@
-from random import random
+import random
+
 from pyarcade.imastermind import *
 
 
@@ -36,7 +37,6 @@ class HiddenSequenceMastermind(iMastermind):
     def check_win(self):
         if len(self.current_result[0]) == self.sequence_length:
             self.game_state = GameState.WIN
-            self.all_history["Win"] += 1
 
     def get_display_string(self) -> str:
         correct_digits = [x + 1 for x in self.current_result[0]]
