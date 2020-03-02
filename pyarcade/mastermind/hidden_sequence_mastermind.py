@@ -31,18 +31,17 @@ class HiddenSequenceMastermind(iMastermind):
                 nowhere_indices.append(i)
 
         self.current_result = correct_indices, misplaced_indices, nowhere_indices
+        self.check_win()
 
     def check_win(self):
         if len(self.current_result[0]) == self.sequence_length:
-            self.game_over(True)
+            self.game_state = GameState.WIN
+            self.all_history["Win"] += 1
 
-    def update_ui(self):
-        """
-        TODO: UPDATE UI HERE
-        """
-        raise NotImplementedError
+    def get_display_data(self):
+        return self.current_result
 
     def reset(self):
         self.current_hidden_sequence = self.generate_hidden_sequence()
         self.game_state = GameState.PENDING
-        self.clear_history()
+        self.guess_history = []

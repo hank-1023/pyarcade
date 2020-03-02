@@ -6,7 +6,7 @@ menu = ["Home", "Play War", "Play Mine Sweeper", "Play Bulls and Cows", "Scorebo
 
 def print_menu(stdscr, select_row_idx):
     stdscr.clear()
-    h,w = stdscr.getmaxyx()
+    h, w = stdscr.getmaxyx()
 
     for idx, row in enumerate(menu):
         x = w//2 -len(row)//2
@@ -48,6 +48,14 @@ def main(stdscr):
 
         stdscr.refresh()
 
+def war(stdscr):
+    pass
+
+def bullandcow(stdscr):
+    pass
+
+def mine_sweeper(stdscr):
+    pass
 
 curses.wrapper(main)
 
