@@ -5,12 +5,7 @@ class GameState(Enum):
     PENDING = 0
     WIN = 1
     LOSE = 2
-
-
-class OpCode(Enum):
-    RESET = 0
-    CLEAR_HISTORY = 1
-    VALID_INPUT = 2
+    TIE = 3
 
 
 class iMastermind:
@@ -20,31 +15,7 @@ class iMastermind:
     def __init__(self):
         self.game_state = GameState.PENDING
         self.guess_history = []
-
-    def on_user_input(self, op_code: OpCode, game_input: [int]):
-        """
-        Controller of iMastermind functions.
-        """
-        if op_code == OpCode.RESET:
-            self.reset()
-        elif op_code == OpCode.CLEAR_HISTORY:
-            self.clear_history()
-        elif op_code == OpCode.VALID_INPUT:
-            self.execute_input(game_input)
-            self.check_win()
-            self.update_ui()
-
-    def game_over(self, win: bool):
-        """
-        Changes the game_state if necessary
-        """
-        if win:
-            self.game_state = GameState.WIN
-        else:
-            self.game_state = GameState.LOSE
-
-    def clear_history(self):
-        self.guess_history = []
+        self.all_history = {"Win": 0, "Lose": 0}
 
     def execute_input(self, game_input: [int]):
         """
@@ -59,11 +30,16 @@ class iMastermind:
     def check_win(self):
         """
         Called by on_user_input after execute_input() to check if user has won the game
+        Should update self.game_state
         """
         raise NotImplementedError
 
-    def update_ui(self):
+    def get_display_data(self):
         raise NotImplementedError
 
     def reset(self):
         raise NotImplementedError
+
+    def clear_history(self):
+        self.all_history = {"Win": 0, "Lose": 0}
+
