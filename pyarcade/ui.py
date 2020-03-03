@@ -3,6 +3,7 @@ from pyarcade.client import *
 
 
 class MENUTYPE(Enum):
+
     MAIN_MENU = ['Play Hidden Sequence', 'Play War', 'Play Mine Sweeper', 'Try to Play Games!', 'Exit']
     HIDDENSEQUENCE = ['Hidden Sequence', 'Reset', 'My guess:', 'Exit']
     WAR = ['War', 'Reset', 'Play', 'Exit']
@@ -16,12 +17,13 @@ class Menu(object):
         self.window.keypad(1)
         self.client = Client()
         self.position = 0
+        self.has_cancel = False
 
     def move(self, n, x):
         self.position += n
         if self.position < 0:
             self.position = 0
-        elif self.position >= x:
+        if self.position >= x:
             self.position = x - 1
 
     def display_menu(self, client):
@@ -40,18 +42,20 @@ class Menu(object):
         while True:
             self.display_menu(MENUTYPE.MAIN_MENU)
 
+            if self.has_cancel:
+                break
             key = self.window.getch()
-
+            self.window.addstr(8, 0, str(self.position))
             if key in [curses.KEY_ENTER, ord('\n')]:
+                self.window.addstr(8, 8, str(self.position))
                 if self.position == 4:
                     break
-                elif self.position == 0:
+                if self.position == 0:
                     self.hidden_sequence_user_interface()
                 elif self.position == 1:
                     self.war_menu_interface()
                 elif self.position == 2:
                     self.mine_sweeper_interface()
-
             elif key == curses.KEY_UP:
                 self.move(-1, 5)
 
@@ -179,3 +183,6 @@ class Menu(object):
         self.window.clear()
         curses.doupdate()
         return user_input
+
+    def exit(self):
+        self.has_cancel == True
