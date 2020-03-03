@@ -1,5 +1,3 @@
-import os
-
 from pyarcade.toy_ui import *
 from curses import wrapper
 
