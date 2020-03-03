@@ -97,10 +97,10 @@ class ClientTestCase(unittest.TestCase):
         client = Client()
         client.start_game(GameType.MINE_SWEEPER)
 
-        client.parse_execute_input("0, 0")
-        client.parse_execute_input("0,  0")
+        client.parse_execute_input("1, 1")
+        client.parse_execute_input("1,  1")
 
-        self.assertEqual(client.get_mastermind_local_history(), [[0, 0]])
+        self.assertEqual(client.get_mastermind_local_history(), [[1, 1]])
 
     def test_client_minesweeper_normal_input(self):
         client = Client()
@@ -115,8 +115,8 @@ class ClientTestCase(unittest.TestCase):
 
         client.mastermind_creator.mastermind.game_matrix = assumed_game_matrix
 
-        client.parse_execute_input("0, 0")
         client.parse_execute_input("1, 1")
+        client.parse_execute_input("2, 2")
 
         desired_output = "['0', 'x', 'x', 'x']\n" \
                          "['x', '1', 'x', 'x']\n" \
@@ -138,8 +138,8 @@ class ClientTestCase(unittest.TestCase):
 
         client.mastermind_creator.mastermind.game_matrix = assumed_game_matrix
 
-        client.parse_execute_input("0, 0")
         client.parse_execute_input("1, 1")
+        client.parse_execute_input("2, 2")
 
         desired_output = "['0', 'x', 'x', 'x']\n" \
                          "['x', '1', 'x', 'x']\n" \
@@ -147,7 +147,7 @@ class ClientTestCase(unittest.TestCase):
                          "['x', 'x', 'x', 'x']\n"
         self.assertEqual(client.get_display_data(), desired_output)
 
-        client.parse_execute_input("1, 2")
+        client.parse_execute_input("2, 3")
 
         desired_output = "['0', 'x', 'x', 'x']\n" \
                          "['x', '1', '1', 'x']\n" \
@@ -168,9 +168,9 @@ class ClientTestCase(unittest.TestCase):
 
         client.mastermind_creator.mastermind.game_matrix = assumed_game_matrix
 
-        client.parse_execute_input("0, 0")
         client.parse_execute_input("1, 1")
-        client.parse_execute_input("2, 1")
+        client.parse_execute_input("2, 2")
+        client.parse_execute_input("3, 2")
 
         desired_output = "['0', 'x', 'x', 'x']\n" \
                          "['x', '1', 'x', 'x']\n" \
@@ -185,9 +185,9 @@ class ClientTestCase(unittest.TestCase):
         client = Client()
         client.start_game(GameType.MINE_SWEEPER)
 
-        client.parse_execute_input("0, 0")
         client.parse_execute_input("1, 1")
-        client.parse_execute_input("2, 1")
+        client.parse_execute_input("2, 2")
+        client.parse_execute_input("3, 2")
 
         client.parse_execute_input("reset")
         desired_output = "['x', 'x', 'x', 'x']\n" \
@@ -223,9 +223,9 @@ class ClientTestCase(unittest.TestCase):
 
         client.mastermind_creator.mastermind.game_matrix = assumed_game_matrix
 
-        client.parse_execute_input("0, 0")
         client.parse_execute_input("1, 1")
-        client.parse_execute_input("2, 1")
+        client.parse_execute_input("2, 2")
+        client.parse_execute_input("3, 2")
 
         desired_output = "['0', 'x', 'x', 'x']\n" \
                          "['x', '1', 'x', 'x']\n" \
