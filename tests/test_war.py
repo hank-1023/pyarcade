@@ -72,8 +72,8 @@ class WarMastermindTestCase(unittest.TestCase):
         mastermind.dealer_deck = [Card(s, r) for s in CARD_SUITE for r in RANK_SEQUENCE]
         mastermind.player_deck = [Card(s, r) for s in CARD_SUITE for r in RANK_SEQUENCE]
 
-        desired_str = "Player deck: [('H', '2'), ('H', '3'), ('H', '4'), ('H', '5')] ...\n" \
-                      "Dealer deck: [('H', '2'), ('H', '3'), ('H', '4'), ('H', '5')] ...\n" \
+        desired_str = "Player deck: [('H', '2'), ('H', '3'), ('H', '4'), ('H', '5'), ('H', '6')] ...\n" \
+                      "Dealer deck: [('H', '2'), ('H', '3'), ('H', '4'), ('H', '5'), ('H', '6')] ...\n" \
                       "Card pool: []"
 
         self.assertEqual(mastermind.get_display_string(), desired_str)
