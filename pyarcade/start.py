@@ -7,3 +7,6 @@ def run_pyarcade():
     """
     wrapper(UserInterface)
 
+
+if __name__ == '__main__':
+    run_pyarcade()

@@ -96,7 +96,6 @@ class WarMastermind(iMastermind):
     def get_display_string(self) -> str:
         player_deck_in_tuple = [(c.suite, c.rank) for c in self.player_deck]
         dealer_deck_in_tuple = [(c.suite, c.rank) for c in self.dealer_deck]
-        card_pool_in_tuple = [(c.suite, c.rank) for c in self.card_pool]
 
         if len(player_deck_in_tuple) > 5:
             player_deck_string = str(player_deck_in_tuple[0:5]) + " ..."
