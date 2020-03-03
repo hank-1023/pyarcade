@@ -19,7 +19,7 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
                                   [0, 0, 1, -1, 2, 0],
                                   [0, 0, 1, 1, 1, 0],
                                   [0, 0, 0, 0, 0, 0]]
-        mastermind.execute_input([0, 2])
+        mastermind.execute_input([1, 3])
         self.assertEqual(mastermind.display_board[0][2], "1")
         self.assertEqual(mastermind.game_state, GameState.PENDING)
 
@@ -31,7 +31,7 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
                                   [0, 0, 1, -1, 2, 0],
                                   [0, 0, 1, 1, 1, 0],
                                   [0, 0, 0, 0, 0, 0]]
-        mastermind.execute_input([1, 3])
+        mastermind.execute_input([2, 4])
         self.assertEqual(mastermind.game_state, GameState.LOSE)
 
     def test_mine_sweeper_win(self):
@@ -43,20 +43,20 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
                                   [0, 0, 1, 1, 1, 0],
                                   [0, 0, 0, 0, 0, 0]]
         # The execute_input's index should still relate to the actual board's index
-        mastermind.execute_input([0, 0])
-        mastermind.execute_input([0, 1])
-        mastermind.execute_input([0, 2])
-        mastermind.execute_input([0, 3])
-        mastermind.execute_input([1, 0])
         mastermind.execute_input([1, 1])
         mastermind.execute_input([1, 2])
-        mastermind.execute_input([2, 0])
+        mastermind.execute_input([1, 3])
+        mastermind.execute_input([1, 4])
         mastermind.execute_input([2, 1])
+        mastermind.execute_input([2, 2])
         mastermind.execute_input([2, 3])
-        mastermind.execute_input([3, 0])
         mastermind.execute_input([3, 1])
         mastermind.execute_input([3, 2])
-        mastermind.execute_input([3, 3])
+        mastermind.execute_input([3, 4])
+        mastermind.execute_input([4, 1])
+        mastermind.execute_input([4, 2])
+        mastermind.execute_input([4, 3])
+        mastermind.execute_input([4, 4])
 
         self.assertEqual(mastermind.game_state, GameState.WIN)
 
@@ -68,7 +68,7 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
                                   [0, 0, 1, -1, 2, 0],
                                   [0, 0, 1, 1, 1, 0],
                                   [0, 0, 0, 0, 0, 0]]
-        mastermind.execute_input([0, 2])
+        mastermind.execute_input([1, 3])
         desired_str = "['x', 'x', '1', 'x']\n" \
                       "['x', 'x', 'x', 'x']\n" \
                       "['x', 'x', 'x', 'x']\n" \
@@ -78,7 +78,7 @@ class MineSweeperMastermindTestCase(unittest.TestCase):
 
     def test_mine_sweeper_reset(self):
         mastermind = MineSweeperMastermind()
-        mastermind.execute_input([1, 3])
+        mastermind.execute_input([2, 4])
         mastermind.reset()
 
         x_count = sum(sublist.count("x") for sublist in mastermind.display_board)

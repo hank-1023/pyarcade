@@ -84,7 +84,7 @@ class UserInterface:
         if game_type == GameType.HIDDEN_SEQUENCE:
             prompt = "Please input 4 digits: "
         elif game_type == GameType.MINE_SWEEPER:
-            prompt = "Please input two numbers separated by comma: "
+            prompt = "Please input two numbers separated by comma (1 based): "
         elif game_type == GameType.WAR:
             prompt = "Please type in \"deal\" to deal: "
 
