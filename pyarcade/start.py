@@ -1,4 +1,4 @@
-from pyarcade.toy_ui import *
+from pyarcade.ui import *
 from curses import wrapper
 
 
@@ -7,3 +7,6 @@ def run_pyarcade():
     """
     wrapper(UserInterface)
 
+
+if __name__ == '__main__':
+    run_pyarcade()

@@ -268,5 +268,3 @@ class ClientTestCase(unittest.TestCase):
                          "Dealer deck: [(3, '10')]\n"
         self.assertEqual(client.get_display_data(), desired_output)
         self.assertEqual(client.get_game_state(), GameState.WIN)
-
-
