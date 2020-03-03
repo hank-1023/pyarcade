@@ -27,8 +27,8 @@ The concrete products are in **pyarcade/mastermind** module
 As a minified example: 
 
 ```Python
-from pyarcade.mastermind.hidden_sequence_mastermind import *
-from pyarcade.mastermind.war_mastermind import *
+from pyarcade.hidden_sequence_mastermind import *
+from pyarcade.war_mastermind import *
 
 # The Creator class
 class iMastermindCreator:

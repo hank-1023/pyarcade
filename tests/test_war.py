@@ -1,5 +1,5 @@
 import unittest
-from pyarcade.mastermind.war_mastermind import *
+from pyarcade.war_mastermind import *
 
 
 class WarMastermindTestCase(unittest.TestCase):

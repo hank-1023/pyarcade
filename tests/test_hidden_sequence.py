@@ -1,5 +1,5 @@
 import unittest
-from pyarcade.mastermind.hidden_sequence_mastermind import *
+from pyarcade.hidden_sequence_mastermind import *
 
 
 class HiddenSequenceMastermindTestCase(unittest.TestCase):

@@ -1,6 +1,6 @@
-from pyarcade.mastermind.hidden_sequence_mastermind import *
-from pyarcade.mastermind.mine_sweeper_mastermind import *
-from pyarcade.mastermind.war_mastermind import *
+from pyarcade.hidden_sequence_mastermind import *
+from pyarcade.mine_sweeper_mastermind import *
+from pyarcade.war_mastermind import *
 
 
 class iMastermindCreator:
