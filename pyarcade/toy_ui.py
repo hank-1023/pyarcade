@@ -8,8 +8,8 @@ class UserInterface:
     def __init__(self, window):
         self.client = Client()
         self.window = window
-        curses.start_color()
         curses.curs_set(0)
+        curses.start_color()
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLUE)
         self.show_main_menu()
 
