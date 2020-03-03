@@ -1,185 +1,160 @@
 import curses
+
 from pyarcade.client import *
+from curses import ascii
 
 
-class MENUTYPE(Enum):
-
-    MAIN_MENU = ['Play Hidden Sequence', 'Play War', 'Play Mine Sweeper', 'Try to Play Games!', 'Exit']
-    HIDDENSEQUENCE = ['Hidden Sequence', 'Reset', 'My guess:', 'Exit']
-    WAR = ['War', 'Reset', 'Play', 'Exit']
-    MINE_SWEEPER = ['Mine Sweeper', 'Reset', 'My move', 'Exit']
-
-
-class Menu(object):
-
-    def __init__(self, stdscreen):
-        self.window = stdscreen.subwin(0, 0)
-        self.window.keypad(1)
+class UserInterface:
+    def __init__(self, window):
         self.client = Client()
-        self.position = 0
+        self.window = window
+        curses.curs_set(0)
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLUE)
+        self.show_main_menu()
 
-    def move(self, n, x):
-        self.position += n
-        if self.position < 0:
-            self.position = 0
-        if self.position >= x:
-            self.position = x - 1
+    def show_main_menu(self):
+        self.client.end_game()
+        menu = ['Hidden Sequence', "Mine Sweeper", "War", "Scores", "Exit"]
+        selected_row = 0
+        menu_functions = [self.show_hidden_sequence, self.show_mine_sweeper,
+                          self.show_war, self.show_scores, None]
 
-    def display_menu(self, client):
-        self.window.refresh()
-        curses.doupdate()
-        for index, item in enumerate(client.value):
-            if index == self.position:
-                mode = curses.A_REVERSE
-            else:
-                mode = curses.A_NORMAL
-            self.window.addstr(1 + index, 1, item, mode)
+        self.update_menu_ui(menu, selected_row)
 
-    def display_main_menu(self):
+        self.wait_input(menu, selected_row, menu_functions)
+
+    def show_hidden_sequence(self):
+        if self.client.game_type is None:
+            self.client.start_game(GameType.HIDDEN_SEQUENCE)
+        elif self.client.get_game_state() != GameState.PENDING:
+            self.show_game_state()
+            return
+
+        menu = ['Hidden Sequence', "Input Here", "Exit"]
+        selected_row = 1
+        self.update_menu_ui(menu, selected_row)
+        self.wait_input(menu, selected_row, [self.show_hidden_sequence,
+                                             self.show_text_input, self.show_main_menu])
+
+    def show_mine_sweeper(self):
+        if self.client.game_type is None:
+            self.client.start_game(GameType.MINE_SWEEPER)
+        elif self.client.get_game_state() != GameState.PENDING:
+            self.show_game_state()
+            return
+
+        menu = ['Mine Sweeper', "Input Here", "Exit"]
+        selected_row = 1
+        self.update_menu_ui(menu, selected_row)
+        self.wait_input(menu, selected_row, [self.show_mine_sweeper,
+                                             self.show_text_input, self.show_main_menu])
+
+    def show_war(self):
+        if self.client.game_type is None:
+            self.client.start_game(GameType.WAR)
+        elif self.client.get_game_state() != GameState.PENDING:
+            self.show_game_state()
+            return
+
+        menu = ['War', "Input Here", "Exit"]
+        selected_row = 1
+        self.update_menu_ui(menu, selected_row)
+        self.wait_input(menu, selected_row, [self.show_war,
+                                             self.show_text_input, self.show_main_menu])
+
+    def show_scores(self):
+        menu = ["Exit"]
+        selected_row = 0
+        self.update_menu_ui(menu, selected_row)
+
+        all_history = self.client.get_all_history()
+        history_string = "Overall, you've won " + str(all_history["Win"]) \
+                         + " times!\nYou've lost " + str(all_history["Lose"]) + " times. "
+        self.window.addstr(2, 0, history_string)
+
+        self.wait_input(menu, selected_row, [self.show_main_menu])
+
+    def show_text_input(self):
+        curses.echo()
+        prompt = ""
+        help_string = "You can type \"reset\" to reset game, \"clear\" to clear game\n" \
+                      "Invalid inputs will be ignored"
+        game_type = self.client.game_type
+        if game_type == GameType.HIDDEN_SEQUENCE:
+            prompt = "Please input 4 digits: "
+        elif game_type == GameType.MINE_SWEEPER:
+            prompt = "Please input two numbers separated by comma (1 based): "
+        elif game_type == GameType.WAR:
+            prompt = "Please type in \"deal\" to deal: "
+
         self.window.clear()
-        self.position = 0
-        while True:
-            self.display_menu(MENUTYPE.MAIN_MENU)
+        self.window.addstr(0, 0, help_string)
+        self.window.addstr(3, 0, prompt)
 
+        buffer = ""
+        while True:
             key = self.window.getch()
-            self.window.addstr(8, 0, str(self.position))
-            if key in [curses.KEY_ENTER, ord('\n')]:
-                self.window.addstr(8, 8, str(self.position))
-                if self.position == 4:
-                    break
-                if self.position == 0:
-                    self.hidden_sequence_user_interface()
-                elif self.position == 1:
-                    self.war_menu_interface()
-                elif self.position == 2:
-                    self.mine_sweeper_interface()
-            elif key == curses.KEY_UP:
-                self.move(-1, 5)
-
-            elif key == curses.KEY_DOWN:
-                self.move(1, 5)
-
-        self.window.clear()
-        curses.doupdate()
-
-    def war_menu_interface(self):
-        self.window.clear()
-        self.client.start_game(GameType.WAR)
-        self.position = 0
-        while True:
-            self.display_menu(MENUTYPE.WAR)
-            self.window.addstr(1, 10, "This is a Card Game and you won by getting all the cards from the dealer, "
-                                      "each time you will put down one card from top of your stack to compare"
-                                      "One with the greater value take all the cards")
-            key = self.window.getch()
-
-            if key in [curses.KEY_ENTER, ord('\n')]:
-                if self.position == 3:
-                    break
-                elif self.position == 2:
-                    self.client.parse_execute_input("deal")
-                    self.window.addstr(5, 1, self.client.get_display_data())
-                elif self.position == 1:
-                    self.client.parse_execute_input("reset")
-                    self.window.clear()
-                    self.window.addstr(5, 1, "You Reset the Game!")
-
-            elif key == curses.KEY_UP:
-                self.move(-1, 4)
-
-            elif key == curses.KEY_DOWN:
-                self.move(1, 4)
-
-        self.window.clear()
-        curses.doupdate()
-        self.display_main_menu()
-
-    def mine_sweeper_interface(self):
-        self.window.clear()
-        self.client.start_game(GameType.MINE_SWEEPER)
-        self.position = 0
-        while True:
-            self.display_menu(MENUTYPE.MINE_SWEEPER)
-            self.window.addstr(1, 10, "This is a Mine Sweeper Game, all you need to do is enter your move and input 1  "
-                                      "digit followed by "" "
-                                      "One with the greater value take all the cards")
-
-            key = self.window.getch()
-
-            if key in [curses.KEY_ENTER, ord('\n')]:
-                if self.position == 3:
-                    break
-                elif self.position == 2:
-                    user_input = self.get_user_input()
-                    self.window.addstr(3, 13, user_input)
-                    self.client.parse_execute_input(user_input)
-                    self.window.addstr(5, 1, self.client.get_display_data())
-                elif self.position == 1:
-                    self.client.parse_execute_input("reset")
-                    self.window.clear()
-                    self.window.addstr(10, 1, "You Reset the Game!")
-
-            elif key == curses.KEY_UP:
-                self.move(-1, 4)
-
-            elif key == curses.KEY_DOWN:
-                self.move(1, 4)
-
-        self.window.clear()
-        curses.doupdate()
-        self.display_main_menu()
-
-    def hidden_sequence_user_interface(self):
-        self.window.clear()
-        self.client.start_game(GameType.HIDDEN_SEQUENCE)
-        self.position = 0
-
-        while True:
-            self.display_menu(MENUTYPE.HIDDENSEQUENCE)
-            key = self.window.getch()
-
-            if key in [curses.KEY_ENTER, ord('\n')]:
-                if self.position == 3:
-                    break
-                elif self.position == 2:
-                    user_input = self.get_user_input()
-                    self.window.addstr(3, 13, user_input)
-                    self.client.parse_execute_input(user_input)
-                    self.window.addstr(5, 1, self.client.get_display_data())
-                elif self.position == 1:
-                    self.client.parse_execute_input("reset")
-                    self.window.clear()
-                    self.window.addstr(5, 1, "You Reset the Game!")
-
-            elif key == curses.KEY_UP:
-                self.move(-1, 4)
-
-            elif key == curses.KEY_DOWN:
-                self.move(1, 4)
-        self.window.clear()
-        curses.doupdate()
-        self.display_main_menu()
-
-    def get_user_input(self):
-        self.window.clear()
-        i = 0
-        user_input = ""
-        while True:
-            self.window.refresh()
-            curses.doupdate()
-            self.window.addstr(0, 0, "Press q to Start Play !")
-            key = chr(self.window.getch())
-
-            if key in ['q']:
+            if key == curses.KEY_ENTER or key == 10:
                 break
-            elif ord(key) != 10:
-                self.window.addstr(1, i, key)
-                i += 2
-                user_input += str(key)
+            buffer += ascii.unctrl(key)
+        self.client.parse_execute_input(buffer)
 
+        if game_type == GameType.HIDDEN_SEQUENCE:
+            self.show_hidden_sequence()
+        elif game_type == GameType.MINE_SWEEPER:
+            self.show_mine_sweeper()
+        elif game_type == GameType.WAR:
+            self.show_war()
+
+    def show_game_state(self):
+        menu = ["Exit"]
+        selected_row = 0
+
+        game_state = self.client.get_game_state()
+        game_state_string = ""
+        if game_state == GameState.WIN:
+            game_state_string = "You've Won!!!"
+        elif game_state == GameState.LOSE:
+            game_state_string = "You've Lost."
+        elif game_state == GameState.TIE:
+            game_state_string = "You've tied with the computer!"
+
+        self.client.end_game()
+        self.update_menu_ui(menu, selected_row)
+        self.window.addstr(2, 0, game_state_string)
+        self.wait_input(menu, selected_row, [self.show_main_menu])
+
+    def wait_input(self, menu: [int], selected_row: int, menu_functions_cbs):
+        while True:
+            key = self.window.getch()
+
+            if key == curses.KEY_UP and len(menu) != 1:
+                selected_row = max(0, selected_row - 1)
+                self.update_menu_ui(menu, selected_row)
+            elif key == curses.KEY_DOWN and len(menu) != 1:
+                selected_row = min(len(menu) - 1, selected_row + 1)
+                self.update_menu_ui(menu, selected_row)
+            elif key == curses.KEY_ENTER or key == 10:
+                break
+
+        if menu_functions_cbs[selected_row]:
+            menu_functions_cbs[selected_row]()
+
+    def update_menu_ui(self, menu: [str], selected_row: int):
         self.window.clear()
-        curses.doupdate()
-        return user_input
+        # No echos in menu typed screens
+        curses.noecho()
 
-    def exit(self):
-        curses.endwin()
+        for index, item in enumerate(menu):
+            if index == selected_row:
+                self.window.attron(curses.color_pair(1))
+                self.window.addstr(index, 0, item)
+                self.window.attroff(curses.color_pair(1))
+            else:
+                self.window.addstr(index, 0, item)
+
+        display_data = self.client.get_display_data()
+        self.window.addstr(len(menu) + 1, 0, display_data)
+
+        self.window.refresh()
