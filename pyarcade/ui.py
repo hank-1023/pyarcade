@@ -101,6 +101,9 @@ class Menu(object):
         self.position = 0
         while True:
             self.display_menu(MENUTYPE.MINE_SWEEPER)
+            self.window.addstr(1, 10, "This is a Mine Sweeper Game, all you need to do is enter your move and input 1  "
+                                      "digit followed by "" "
+                                      "One with the greater value take all the cards")
 
             key = self.window.getch()
 
