@@ -6,6 +6,7 @@ class HiddenSequenceMastermindTestCase(unittest.TestCase):
     def test_hidden_sequence_init(self):
         game = HiddenSequenceMastermind()
         self.assertEqual(len(game.generate_hidden_sequence()), 4)
+        self.assertTrue(all(n < 10 for n in game.generate_hidden_sequence()))
 
     def test_hidden_sequence_execute_input_nowhere(self):
         mastermind = HiddenSequenceMastermind()

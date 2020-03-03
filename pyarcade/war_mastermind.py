@@ -109,8 +109,7 @@ class WarMastermind(iMastermind):
             dealer_deck_string = str(dealer_deck_in_tuple)
 
         return "Player deck: " + player_deck_string + "\n" + \
-               "Dealer deck: " + dealer_deck_string + "\n" + \
-               "Card pool: " + str(card_pool_in_tuple)
+               "Dealer deck: " + dealer_deck_string + "\n"
 
     def reset(self):
         self.prepare_cards()
