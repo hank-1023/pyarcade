@@ -17,7 +17,7 @@ class Menu(object):
         self.window.keypad(1)
         self.client = Client()
         self.position = 0
-        self.has_cancel = False
+        self.cancenlled = False
 
     def move(self, n, x):
         self.position += n
@@ -42,7 +42,7 @@ class Menu(object):
         while True:
             self.display_menu(MENUTYPE.MAIN_MENU)
 
-            if self.has_cancel:
+            if self.cancenlled:
                 break
             key = self.window.getch()
             self.window.addstr(8, 0, str(self.position))
@@ -185,4 +185,4 @@ class Menu(object):
         return user_input
 
     def exit(self):
-        self.has_cancel == True
+        self.cancenlled = True
