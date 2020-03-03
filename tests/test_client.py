@@ -258,16 +258,14 @@ class ClientTestCase(unittest.TestCase):
             [Card(s, r) for s in range(9) for r in player_rank_sequence]
 
         desired_output = "Player deck: [(0, 'J'), (0, 'Q'), (0, 'K'), (0, 'A'), (1, 'J')] ...\n" \
-                         "Dealer deck: [(0, '2'), (0, '3'), (0, '4'), (0, '5'), (0, '6')] ...\n" \
-                         "Card pool: []"
+                         "Dealer deck: [(0, '2'), (0, '3'), (0, '4'), (0, '5'), (0, '6')] ...\n"
         self.assertEqual(client.get_display_data(), desired_output)
 
         while client.get_game_state() != GameState.WIN:
             client.parse_execute_input("deal")
 
         desired_output = "Player deck: [(8, 'A'), (0, 'J'), (0, '2'), (0, 'Q'), (0, '3')] ...\n" \
-                         "Dealer deck: [(3, '10')]\n" \
-                         "Card pool: []"
+                         "Dealer deck: [(3, '10')]\n"
         self.assertEqual(client.get_display_data(), desired_output)
         self.assertEqual(client.get_game_state(), GameState.WIN)
 

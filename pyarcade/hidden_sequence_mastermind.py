@@ -4,7 +4,7 @@ from pyarcade.imastermind import *
 
 
 class HiddenSequenceMastermind(iMastermind):
-    def __init__(self, game_size: int = 4, game_range: int = 10):
+    def __init__(self, game_size: int = 4, game_range: int = 9):
         super().__init__()
         self.sequence_length = game_size
         self.number_range = game_range

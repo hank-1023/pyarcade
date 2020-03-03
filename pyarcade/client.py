@@ -71,8 +71,15 @@ class Client:
     def clear_all_history(self):
         self.all_history = {"Win": 0, "Lose": 0}
 
-    def get_display_data(self):
-        return self.mastermind_creator.get_display_string()
+    def get_display_data(self) -> str:
+        if self.mastermind_creator:
+            return self.mastermind_creator.get_display_string()
+        else:
+            return ""
 
     def get_game_state(self) -> GameState:
         return self.mastermind_creator.get_game_state()
+
+    def end_game(self):
+        self.game_type = None
+        self.mastermind_creator = None
