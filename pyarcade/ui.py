@@ -5,8 +5,8 @@ from pyarcade.client import GameType
 
 
 class MENUTYPE(Enum):
-    MAIN_MENU = ['Play Hidden Sequence', 'Play War', 'Play Mine Sweeper', 'Exit']
-    HIDDENSEQUENCE = [ 'Bulls and Cows', 'Reset', 'My guess:', 'Exit']
+    MAIN_MENU = ['Play Hidden Sequence', 'Play War', 'Play Mine Sweeper', 'Try to Play Games!','Exit']
+    HIDDENSEQUENCE = ['Hidden Sequence', 'Reset', 'My guess:', 'Exit']
     WAR = ['War','Reset', 'Play',  'Exit']
     MINE_SWEEPER = ['Mine Sweeper', 'Reset', 'My move', 'Exit']
 
@@ -38,27 +38,27 @@ class Menu(object):
 
     def display_main_menu(self):
         self.window.clear()
+        self.position = 0
         while True:
             self.display_menu(MENUTYPE.MAIN_MENU)
 
             key = self.window.getch()
 
             if key in [curses.KEY_ENTER, ord('\n')]:
-                if self.position == 3:
+                if self.position == 4:
                     break
-                else:
-                    if self.position == 0:
-                        self.hidden_sequence_infterface()
-                    elif self.position == 1:
-                        self.war_menu_interface()
-                    elif self.position == 2:
-                        self.mine_sweeper_interface()
+                elif self.position == 0:
+                    self.hidden_sequence_user_infterface()
+                elif self.position == 1:
+                    self.war_menu_interface()
+                elif self.position == 2:
+                    self.mine_sweeper_interface()
 
             elif key == curses.KEY_UP:
-                self.move(-1, 4)
+                self.move(-1, 5)
 
             elif key == curses.KEY_DOWN:
-                self.move(1, 4)
+                self.move(1, 5)
 
         self.window.clear()
         curses.doupdate()
@@ -69,7 +69,9 @@ class Menu(object):
         self.position = 0
         while True:
             self.display_menu(MENUTYPE.WAR)
-
+            self.window.addstr(1, 10, "This is a Card Game and you won by getting all the cards from the dealer, "
+                                      "each time you will put down one card from top of your stack to compare" 
+                                    "One with the greater value take all the cards" )
             key = self.window.getch()
 
             if key in [curses.KEY_ENTER, ord('\n')]:
@@ -176,22 +178,6 @@ class Menu(object):
         self.window.clear()
         curses.doupdate()
         return user_input
-
-"""
-class MyApp(object):
-
-    def __init__(self, stdscreen):
-        self.screen = stdscreen
-        curses.curs_set(0)
-        main_menu = Menu(self.screen)
-        main_menu.display_main_menu()
-
-
-if __name__ == '__main__':
-    curses.wrapper(MyApp)
-    """
-
-
 
 
 
