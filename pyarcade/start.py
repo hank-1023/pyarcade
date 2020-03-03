@@ -8,7 +8,4 @@ def run_pyarcade():
     screen = curses.initscr()
     main_menu = Menu(screen)
     main_menu.display_main_menu()
-
-
-if __name__ == '__main__':
     curses.wrapper(run_pyarcade())

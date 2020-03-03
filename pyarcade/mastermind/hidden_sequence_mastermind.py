@@ -39,6 +39,9 @@ class HiddenSequenceMastermind(iMastermind):
             self.game_state = GameState.WIN
 
     def get_display_string(self) -> str:
+        if self.current_result is None:
+            return ""
+
         correct_digits = [x + 1 for x in self.current_result[0]]
         misplaced_digits = [x + 1 for x in self.current_result[1]]
         not_existed_digits = [x + 1 for x in self.current_result[2]]
