@@ -1,11 +1,9 @@
-from pyarcade.input_system import *
+from pyarcade.toy_ui import *
+from curses import wrapper
 
 
-def run_pyarcade(game_type: GameType):
+def run_pyarcade():
     """ This will effectively become our program entrypoint.
     """
-    input_manager = InputManager(game_type)
+    wrapper(UserInterface)
 
-
-if __name__ == "__main__":
-    run_pyarcade(GameType.HIDDEN_SEQUENCE)
