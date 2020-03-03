@@ -1,4 +1,4 @@
-from pyarcade.toy_ui import *
+from pyarcade.ui import *
 from curses import wrapper
 
 
