@@ -16,6 +16,9 @@ def run_pyarcade():
     curses.wrapper(run_pyarcade())
 
 
+def cancel_menu(menu: Menu):
+    menu.has_cancel = True
+
+
 if __name__ == '__main__':
     curses.wrapper(run_pyarcade())
-
