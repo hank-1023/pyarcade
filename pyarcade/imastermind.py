@@ -37,4 +37,3 @@ class iMastermind:
 
     def reset(self):
         raise NotImplementedError
-
